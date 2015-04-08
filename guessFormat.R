@@ -4,7 +4,7 @@ guessFormat <- function(x) {
   #  x, a character vector of dates.
   # Returns:
   #  format.guess, a date-time format interpretable by strptime, etc.
-  sample.size <- 2000
+  sample.size <- 4000
   if (length(x) > sample.size) {
     x <- x[sample(length(x), sample.size)]  # for speed, sample  rather than computing all.
   }
@@ -12,7 +12,7 @@ guessFormat <- function(x) {
   split.date <- unlist(split.date)
   split.date <- split(split.date, 1:length(split.date) %% 2 == 0)  # pick every other element
   dates <- as.vector(unlist(split.date[1]))
-  date.sep <- gsub("[0123456789]", "", dates)  # str_split([:punct:]) isn't working, causing the next 3 LoC:
+  date.sep <- gsub("[0123456789]", "", dates)  # str_split([:punct:]) isn't working, causing the next 3 LoC: 
   date.sep <- paste(date.sep, collapse = "")  # combine
   date.sep <- str_split(date.sep, pattern = "")  # split into individual characters
   date.sep <- table(date.sep)  # count how often each character appears
@@ -71,19 +71,32 @@ guessFormat <- function(x) {
     # If exactly one position has integers 1 through 12, assign that as the month.
     # The implicit assumption is that we have fairly big data and we'll see all months & days.
     if (identical(date.pos1, 1:12) & !identical(date.pos2, 1:12) & !identical(date.pos3, 1:12)) {
-      pos1 <- "m"
+      pos1 <- "m"  
     } else if (!identical(date.pos1, 1:12) & identical(date.pos2, 1:12) & !identical(date.pos3, 1:12)) {
       pos2 <- "m"
     } else if (!identical(date.pos1, 1:12) & !identical(date.pos2, 1:12) & identical(date.pos3, 1:12)) {
-      pos3 <- "m"
+      pos3 <- "m"  
     }
+    
+    
+    
+    if ((min(date.pos1) >= 1 & max(date.pos1) <= 12) & !(min(date.pos2) >= 1 & max(date.pos2) <= 12) & !(min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
+      pos1 <- "m"  
+    } else if (!(min(date.pos1) >= 1 & max(date.pos1) <= 12) & (min(date.pos2) >= 1 & max(date.pos2) <= 12) & !(min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
+      pos2 <- "m"
+    } else if (!(min(date.pos1) >= 1 & max(date.pos1) <= 12) & !(min(date.pos2) >= 1 & max(date.pos2) <= 12) & (min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
+      pos3 <- "m"  
+    }
+    
+    
+    
     # If exactly one position has integers 1:31, assign that as the day.
     if (identical(date.pos1, 1:31) & !identical(date.pos2, 1:31) & !identical(date.pos3, 1:31)) {
-      pos1 <- "d"
+      pos1 <- "d"  
     } else if (!identical(date.pos1, 1:31) & identical(date.pos2, 1:31) & !identical(date.pos3, 1:31)) {
-      pos2 <- "d"
+      pos2 <- "d"  
     } else if (!identical(date.pos1, 1:31) & !identical(date.pos2, 1:31) & identical(date.pos3, 1:31)) {
-      pos3 <- "d"
+      pos3 <- "d"  
     }
     if ((pos1 == "m" | pos2 == "m" | pos3 == "m") & (pos1 == "d" | pos2 == "d" | pos3 == "d") & (pos1 == -1 | pos2 == -1 | pos3 == -1)) {
       # If month and day but not year are assigned, assign the year.
@@ -102,7 +115,7 @@ guessFormat <- function(x) {
       assign(year.pos, year.format)
     }
     date.format <- paste0(pos1, pos2, pos3)
-  }
+  }  
   # Now get the times.
   times <- as.vector(unlist(split.date[2]))
   times <- strsplit(times, "[:punct:]")

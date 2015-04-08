@@ -28,14 +28,16 @@ ConvertDateTime <- function(x) {
   PM.times <- grepl("PM", x)  # vector of which times are PM
   x <- gsub("PM", "", x)  # Remove PM.
   x <- gsub("AM", "", x)  # Remove AM, since it is redundant.
-
+  
   # Guess the format.
   #date.format <- whichFormat(x)  # try {TimeDate}'s format guesser.
   # Commented out because it incorrectly guesses "7-4-2012 12:33" as "%Y%m%d%H%M%S".
   date.format <- guessFormat(x)  # Use new guess the date format.
   x.date <- as.POSIXlt(strptime(x, format = date.format))  # convert.
-  x.hour <- hour(x.date)  # get hours
-  x.date[PM.times & x.hour != 12] <- x.date[PM.times & x.hour != 12] + (60 * 60 * 12)  # Add 12 hours to all PM times on or after 1PM.
-  x.date[!PM.times & x.hour == 12] <- x.date[!PM.times & x.hour == 12] - (60 * 60 * 12)  # Subtract 12 hours from all PM times before 1AM.
+  if (any(PM.times)) {  # if we had any PM times, fix them.
+    x.hour <- hour(x.date)  # get hours
+    x.date[PM.times & x.hour != 12] <- x.date[PM.times & x.hour != 12] + (60 * 60 * 12)  # Add 12 hours to all PM times on or after 1PM.
+    x.date[!PM.times & x.hour == 12] <- x.date[!PM.times & x.hour == 12] - (60 * 60 * 12)  # Subtract 12 hours from all PM times before 1AM.
+  }
   return(x.date)
 }
