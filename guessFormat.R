@@ -4,14 +4,21 @@ guessFormat <- function(x) {
   #  x, a character vector of dates.
   # Returns:
   #  format.guess, a date-time format interpretable by strptime, etc.
+  x <- x[!is.na(x)]  # when guessing the format, ignore NAs as they provide no clues and complicate downstream steps if kept.
   sample.size <- 4000
   if (length(x) > sample.size) {
     x <- x[sample(length(x), sample.size)]  # for speed, sample  rather than computing all.
   }
-  split.date <- strsplit(x, " ")  # assume date-time separated by " "
-  split.date <- unlist(split.date)
-  split.date <- split(split.date, 1:length(split.date) %% 2 == 0)  # pick every other element
-  dates <- as.vector(unlist(split.date[1]))
+  space.count <- sum(grepl(" ", x))
+  has.times <- ifelse(space.count > .5 * length(x), T, F)
+  if (has.times) {
+    split.date <- strsplit(x, " ")  # assume date-time separated by " "
+    split.date <- unlist(split.date)
+    split.date <- split(split.date, 1:length(split.date) %% 2 == 0)  # pick every other element
+    dates <- as.vector(unlist(split.date[1])) 
+  } else {
+    dates <- x
+  }
   date.sep <- gsub("[0123456789]", "", dates)  # str_split([:punct:]) isn't working, causing the next 3 LoC: 
   date.sep <- paste(date.sep, collapse = "")  # combine
   date.sep <- str_split(date.sep, pattern = "")  # split into individual characters
@@ -68,18 +75,9 @@ guessFormat <- function(x) {
     date.pos1 <- date.pos1[order(date.pos1)]
     date.pos2 <- date.pos2[order(date.pos2)]
     date.pos3 <- date.pos3[order(date.pos3)]
-    # If exactly one position has integers 1 through 12, assign that as the month.
-    # The implicit assumption is that we have fairly big data and we'll see all months & days.
-    if (identical(date.pos1, 1:12) & !identical(date.pos2, 1:12) & !identical(date.pos3, 1:12)) {
-      pos1 <- "m"  
-    } else if (!identical(date.pos1, 1:12) & identical(date.pos2, 1:12) & !identical(date.pos3, 1:12)) {
-      pos2 <- "m"
-    } else if (!identical(date.pos1, 1:12) & !identical(date.pos2, 1:12) & identical(date.pos3, 1:12)) {
-      pos3 <- "m"  
-    }
-    
-    
-    
+    # We could be more conservative & assumption if we have fairly big data that we'll see all months & days.
+    # But for now, just look for ranges.
+    # If exactly only one position is between 1 and 12, assign that as the month.
     if ((min(date.pos1) >= 1 & max(date.pos1) <= 12) & !(min(date.pos2) >= 1 & max(date.pos2) <= 12) & !(min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
       pos1 <- "m"  
     } else if (!(min(date.pos1) >= 1 & max(date.pos1) <= 12) & (min(date.pos2) >= 1 & max(date.pos2) <= 12) & !(min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
@@ -87,17 +85,19 @@ guessFormat <- function(x) {
     } else if (!(min(date.pos1) >= 1 & max(date.pos1) <= 12) & !(min(date.pos2) >= 1 & max(date.pos2) <= 12) & (min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
       pos3 <- "m"  
     }
-    
-    
-    
-    # If exactly one position has integers 1:31, assign that as the day.
-    if (identical(date.pos1, 1:31) & !identical(date.pos2, 1:31) & !identical(date.pos3, 1:31)) {
+    # If exactly only one position is between 1 and 31, assign that as the month.
+    # Note that this will not be able to classify conditions when all date positions are between 1 & 12, i.e., 1/11/10, 1/12/12, 12/01/01, etc.)
+    if ((min(date.pos1) >= 1 & max(date.pos1) > 12 & max(date.pos1) <= 31) & !(min(date.pos2) >= 1 & max(date.pos2) > 12 & max(date.pos2) <= 31) & !(min(date.pos3) >= 1 & max(date.pos3) > 12 & max(date.pos3) <= 31)) {
       pos1 <- "d"  
-    } else if (!identical(date.pos1, 1:31) & identical(date.pos2, 1:31) & !identical(date.pos3, 1:31)) {
-      pos2 <- "d"  
-    } else if (!identical(date.pos1, 1:31) & !identical(date.pos2, 1:31) & identical(date.pos3, 1:31)) {
+    } else if (!(min(date.pos1) >= 1 & max(date.pos1) > 12 & max(date.pos1) <= 31) & (min(date.pos2) >= 1 & max(date.pos2) > 12 & max(date.pos2) <= 31) & !(min(date.pos3) >= 1 & max(date.pos3) > 12 & max(date.pos3) <= 31)) {
+      pos2 <- "d"
+    } else if (!(min(date.pos1) >= 1 & max(date.pos1) > 12 & max(date.pos1) <= 31) & !(min(date.pos2) >= 1 & max(date.pos2) > 12 & max(date.pos2) <= 31) & (min(date.pos3) >= 1 & max(date.pos3) > 12 & max(date.pos3) <= 31)) {
       pos3 <- "d"  
     }
+    
+    # One way to further improve would be to check for four digit dates, and if any are found, classify the year.
+    # Then, we could look and see if only one position is missing, and assign it.
+    
     if ((pos1 == "m" | pos2 == "m" | pos3 == "m") & (pos1 == "d" | pos2 == "d" | pos3 == "d") & (pos1 == -1 | pos2 == -1 | pos3 == -1)) {
       # If month and day but not year are assigned, assign the year.
       year.pos <- which(c(pos1, pos2, pos3) == -1)
@@ -117,21 +117,25 @@ guessFormat <- function(x) {
     date.format <- paste0(pos1, pos2, pos3)
   }  
   # Now get the times.
-  times <- as.vector(unlist(split.date[2]))
-  times <- strsplit(times, "[:punct:]")
-  time.pos <- unlist(lapply(times, length))  # count the time posistions in each observation.
-  n.time.pos <- true.mode(time.pos)  # choose the most common number.
-  if (n.time.pos == 0) {
-    time.format <- ""  # no time
-  } else if (n.time.pos == 1) {
-    time.format <- "h"  # hours
-  } else if (n.time.pos == 2) {
-    time.format <- "hm"  # h:m
-  } else if (n.time.pos == 3) {
-    time.format <- "hms"  # h:m:s
+  if (has.times) {
+    times <- as.vector(unlist(split.date[2]))
+    times <- strsplit(times, "[:punct:]")
+    time.pos <- unlist(lapply(times, length))  # count the time posistions in each observation.
+    n.time.pos <- true.mode(time.pos)  # choose the most common number.
+    if (n.time.pos == 0) {
+      time.format <- ""  # no time
+    } else if (n.time.pos == 1) {
+      time.format <- "h"  # hours
+    } else if (n.time.pos == 2) {
+      time.format <- "hm"  # h:m
+    } else if (n.time.pos == 3) {
+      time.format <- "hms"  # h:m:s
+    }
+    guess.orders <- paste0(date.format, time.format)  # concatenate the date & time formats
+  } else {
+    guess.orders <- date.format
   }
-  guess.orders <- paste0(date.format, time.format)  # concatenate the date & time formats
-  # guess.orders <- "mdYhm"
+  # guess.orders <- "mdYhm"  # old static assignment
   formats <- guess_formats(x, guess.orders)  # use {lubridate}'s format guesser.
   formats <- table(formats)  # count each format's frequency.
   format.guess <- names(which.max(formats))  # pick the most common

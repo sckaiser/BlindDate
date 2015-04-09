@@ -25,9 +25,9 @@ ConvertDateTime <- function(x) {
     x[n.spaces > 2] <- sub(" ", "-", x[n.spaces > 2])  # replace second occurrences, if any.
   }
   # Handle AM and PM text.
-  PM.times <- grepl("PM", x)  # vector of which times are PM
+  PM.times <- grepl("PM", x)  # store vector of which times are PM
   x <- gsub("PM", "", x)  # Remove PM.
-  x <- gsub("AM", "", x)  # Remove AM, since it is redundant.
+  x <- gsub("AM", "", x)  # Remove AM..
   
   # Guess the format.
   #date.format <- whichFormat(x)  # try {TimeDate}'s format guesser.
@@ -37,7 +37,7 @@ ConvertDateTime <- function(x) {
   if (any(PM.times)) {  # if we had any PM times, fix them.
     x.hour <- hour(x.date)  # get hours
     x.date[PM.times & x.hour != 12] <- x.date[PM.times & x.hour != 12] + (60 * 60 * 12)  # Add 12 hours to all PM times on or after 1PM.
-    x.date[!PM.times & x.hour == 12] <- x.date[!PM.times & x.hour == 12] - (60 * 60 * 12)  # Subtract 12 hours from all PM times before 1AM.
+    x.date[!PM.times & x.hour == 12 & !is.na(x.date)] <- x.date[!PM.times & x.hour == 12 & !is.na(x.date)] - (60 * 60 * 12)  # Subtract 12 hours from all PM times before 1AM.
   }
   return(x.date)
 }
