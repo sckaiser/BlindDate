@@ -13,6 +13,7 @@ ConvertDateTime <- function(x) {
   text.month <- ConvertTextMonth(x.sample, F)  # Get proportion of entries which match a text month
   if (text.month > .95) {  # if more than 95% have text months...
     x <- ConvertTextMonth(x)  # ...then convert to numeric months
+    x.sample <- x[sample(length(x), sample.size)]  # resample
   }
   
   # Count mode number of spaces; if >1, replace (up to) the first two with -
@@ -34,7 +35,9 @@ ConvertDateTime <- function(x) {
   
   # Guess the format.
   date.format <- GuessFormat(x)  # Guess format.
-  x.date      <- as.POSIXlt(strptime(x, format = date.format))  # convert.
+  print(date.format)  # debug
+  # x.date      <- as.POSIXlt(strptime(x, format = date.format))  # convert.
+  x.date      <- parse_date_time(x, orders = date.format)  # lubridate convert.
   if (any(PM.times)) {  # if we had any PM times, fix them.
     x.hour <- hour(x.date)  # get hours
     x.date[PM.times & x.hour != 12] <- x.date[PM.times & x.hour != 12] + (60 * 60 * 12)  # Add 12 hours to all PM times on or after 1PM.
