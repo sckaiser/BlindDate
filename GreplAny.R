@@ -5,5 +5,5 @@ GreplAny <- function(pattern, x, ...) {
   # Returns:
   #  y, a logical vector indicating whether any of the entries in pattern were found in x.
   y <- sapply(pattern, grepl, x, ...)  # check for matches
-  y <- apply(y, 1, any)  # consolidate results
+  apply(y, 1, any)  # consolidate results
 }
