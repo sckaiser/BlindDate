@@ -24,23 +24,16 @@ GuessFormat <- function(x) {
   date.sep <- str_split(date.sep, pattern = "") # split into individual characters
   date.sep <- table(date.sep) # count how often each character appears
   date.sep <- names(which.max(date.sep)) # pick the most frequent
-  dates <- strsplit(dates, date.sep) # split on the presumed separator.
+  if (date.sep != "") {  # handle year-only case: x = c(2014, 2015, ...)
+    dates    <- strsplit(dates, date.sep) # split on the presumed separator. 
+  }
   date.pos <- unlist(lapply(dates, length)) # count the date posistions in each observation.
   n.date.pos <- TrueMode(date.pos) # choose the most common number.
   dates <- unlist(dates)
   dates <- as.integer(dates) # we should be left with integers given the gsub() call above.
   if (n.date.pos == 1) {
-    date.pos1 <- dates
-    # Assume year & assume after year 999 and before year 10000.
-    year.digits <- nchar(dates) # count number of digits
-    year.digits <- TrueMode(year.digits) # pick most common.
-    if (year.digits == 2) {
-      date.format <- "y"
-    } else if (year.digits == 4) {
-      date.format <- "Y"
-    } else {
-      date.format <- -Inf # couldn't figure it out.
-    }
+    # Assume we have a year.
+    date.format <- YearLength(dates)
   } else if (n.date.pos == 2) {
     # Assume we have a month and a year.
     dates <- split(dates, 1:length(dates) %% 2 == 0)
@@ -123,6 +116,7 @@ GuessFormat <- function(x) {
     
     # If month and day but not year are assigned, assign the year.
     # Need to make the 2 digit vs. 4 digit year logic a separate action, run for all.
+    
     if ((pos1 == "m" | pos2 == "m" | pos3 == "m") & (pos1 == "d" | pos2 == "d" | pos3 == "d") & (pos1 == -1 | pos2 == -1 | pos3 == -1)) {
       year.pos <- which(c(pos1, pos2, pos3) == -1)
       year.dates <- get(paste0("date.pos", year.pos))
