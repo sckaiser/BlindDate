@@ -36,7 +36,6 @@ ConvertDateTime <- function(x) {
   # Guess the format.
   date.format <- GuessFormat(x)  # Guess format.
   print(date.format)  # debug
-  # x.date      <- as.POSIXlt(strptime(x, format = date.format))  # convert.
   x.date      <- parse_date_time(x, orders = date.format)  # lubridate convert.
   if (any(PM.times)) {  # if we had any PM times, fix them.
     x.hour <- hour(x.date)  # get hours
