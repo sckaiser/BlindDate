@@ -4,7 +4,7 @@ library(stringr)
 setwd("C:/Users/scott_kaiser/Desktop/Analytics and Data Science/BlindDate")
 files <- c("ConvertDateTime.R", "ConvertTextMonth.R", "CountChars.R", "GreplAny.R",
        "GuessFormat.R", "MultiGsub.R", "RmDupSpace.R", "SetPartition.R",
-       "TrueMode.R", "YearLength.R")
+       "TrueMode.R", "UniqueOrder.R", "YearLength.R")
 sapply(files, source)
 
 # start at midnight, January 1. Add 61 minutes successively
@@ -29,12 +29,13 @@ for (i in 1:ncol(test.mat)) {
   x <- test.mat[ , i]
   # print(GuessFormat(x))
   # convert.mat[ , i] <- parse_date_time(x)
+  print(x[1])
   convert.mat[ , i] <- ConvertDateTime(x)
 }
 
 # This section is loop-free,
 # but harder to debug when a single format conversion fails.
-convert.mat <- apply(test.mat, 2, ConvertDateTime)
+# convert.mat <- apply(test.mat, 2, ConvertDateTime)
 results.mat <- apply(convert.mat, 2, identical, t)
 results     <- apply(results.mat, 2, all)
 
