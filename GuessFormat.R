@@ -50,7 +50,7 @@ GuessFormat <- function(x) {
     } else if (max(date.pos1) <= 12 & max(date.pos2) > 12) {
       date.format <- "my"
     } else if (max(date.pos1) > 12 & max(date.pos2) <= 12) {
-      date.format = "ym"
+      date.format <- "ym"
     } else {
       date.format <- -Inf # couldn't figure it out.
     }
@@ -119,17 +119,9 @@ GuessFormat <- function(x) {
     
     if ((pos1 == "m" | pos2 == "m" | pos3 == "m") & (pos1 == "d" | pos2 == "d" | pos3 == "d") & (pos1 == -1 | pos2 == -1 | pos3 == -1)) {
       year.pos <- which(c(pos1, pos2, pos3) == -1)
-      year.dates <- get(paste0("date.pos", year.pos))
       year.pos <- paste0("pos", year.pos)
-      year.digits <- nchar(year.dates)
-      year.digits <- max(year.digits) # Could alternately use TrueMode() here.
-      if (year.digits == 4) {
-        year.format <- "Y"
-      } else if (year.digits == 2) {
-        year.format <- "y"
-      } else {
-        year.format <- "NA"
-      }
+      year.dates <- get(paste0("date.", year.pos))
+      year.format <- YearLength(year.dates)
       assign(year.pos, year.format)
     }
     date.format <- paste0(pos1, pos2, pos3)   # final date assignment
