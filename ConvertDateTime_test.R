@@ -27,8 +27,7 @@ colnames(convert.mat) <- colnames(test.mat)
 
 for (i in 1:ncol(test.mat)) {
   x <- test.mat[ , i]
-  # print(GuessFormat(x))
-  # convert.mat[ , i] <- parse_date_time(x)
+  # print(GuessFormat(x))  # debug
   print(x[1])
   convert.mat[ , i] <- ConvertDateTime(x)
 }
