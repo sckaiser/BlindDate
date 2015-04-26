@@ -15,7 +15,8 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
   m3 <- c("Janvier", "Fevrier", "Mars", "Avril",
           "Mai", "Juin", "Juillet", "Aout",
-          "Septembre", "Octobre", "Novembre", "Decembre")  # extensibility example
+          "Septembre", "Octobre", "Novembre",
+          "Decembre")  # extensibility example
   date.df <- data.frame(m1 = m1, m2 = m2, m3 = m3, stringsAsFactors = F)
   if (ignore.null) {
     # Handle various string synonyms for NA.
@@ -23,7 +24,7 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
     x[x %in% NA.synonyms] <- NA
   }
   # Find the best matching column.
-  matches     <- apply(date.df, 2, GreplAny, x, ignore.case = T)   # find text month matches
+  matches     <- apply(date.df, 2, GreplAny, x, ignore.case = T)   # match months
   matches     <- apply(matches, 2, sum)  # sum by column
   denominator <- length(x)  # exclude NAs and null strings
   if (ignore.null) {
