@@ -118,9 +118,9 @@ GuessFormat <- function(x) {
     # Need to make the 2 digit vs. 4 digit year logic a separate action, run for all.
     
     if ((pos1 == "m" | pos2 == "m" | pos3 == "m") & (pos1 == "d" | pos2 == "d" | pos3 == "d") & (pos1 == -1 | pos2 == -1 | pos3 == -1)) {
-      year.pos <- which(c(pos1, pos2, pos3) == -1)
-      year.pos <- paste0("pos", year.pos)
-      year.dates <- get(paste0("date.", year.pos))
+      year.pos    <- which(c(pos1, pos2, pos3) == -1)
+      year.pos    <- paste0("pos", year.pos)
+      year.dates  <- get(paste0("date.", year.pos))
       year.format <- YearLength(year.dates)
       assign(year.pos, year.format)
     }
