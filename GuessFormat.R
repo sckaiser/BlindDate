@@ -115,8 +115,6 @@ GuessFormat <- function(x) {
     }
     
     # If month and day but not year are assigned, assign the year.
-    # Need to make the 2 digit vs. 4 digit year logic a separate action, run for all.
-    
     if ((pos1 == "m" | pos2 == "m" | pos3 == "m") & (pos1 == "d" | pos2 == "d" | pos3 == "d") & (pos1 == -1 | pos2 == -1 | pos3 == -1)) {
       year.pos    <- which(c(pos1, pos2, pos3) == -1)
       year.pos    <- paste0("pos", year.pos)
