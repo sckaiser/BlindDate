@@ -5,40 +5,40 @@ GuessFormat <- function(x) {
   # Returns:
   # format.guess, a date-time format interpretable by strptime, etc.
   x <- x[!is.na(x)] # when guessing the format, ignore NAs as they provide no clues and complicate downstream steps if kept.
-  sample.size <- 4000
+  sample.size  <- 4000
   if (length(x) > sample.size) {
-    x <- x[sample(length(x), sample.size)] # for speed, sample rather than computing all.
+    x <- x[sample(length(x), sample.size)] # sample for speed
   }
-  space.count <- sum(grepl(" ", x))
-  has.times <- ifelse(space.count > .5 * length(x), T, F)
+  space.count  <- sum(grepl(" ", x))
+  has.times    <- ifelse(space.count > .5 * length(x), T, F)
   if (has.times) {
     split.date <- strsplit(x, " ") # assume date-time separated by " "
     split.date <- unlist(split.date)
     split.date <- split(split.date, 1:length(split.date) %% 2 == 0) # pick every other element
-    dates <- as.vector(unlist(split.date[1]))
+    dates      <- as.vector(unlist(split.date[1]))
   } else {
-    dates <- x
+    dates    <- x
   }
-  date.sep <- gsub("[0123456789]", "", dates) # str_split([:punct:]) isn't working, causing the next 3 LoC:
-  date.sep <- paste(date.sep, collapse = "") # combine
-  date.sep <- str_split(date.sep, pattern = "") # split into individual characters
-  date.sep <- table(date.sep) # count how often each character appears
-  date.sep <- names(which.max(date.sep)) # pick the most frequent
+  date.sep   <- gsub("[0123456789]", "", dates) # str_split([:punct:]) isn't working, causing the next 3 LoC:
+  date.sep   <- paste(date.sep, collapse = "") # combine
+  date.sep   <- str_split(date.sep, pattern = "") # split into individual characters
+  date.sep   <- table(date.sep) # count how often each character appears
+  date.sep   <- names(which.max(date.sep)) # pick the most frequent
   if (date.sep != "") {  # handle year-only case: x = c(2014, 2015, ...)
     dates    <- strsplit(dates, date.sep) # split on the presumed separator. 
   }
-  date.pos <- unlist(lapply(dates, length)) # count the date posistions in each observation.
+  date.pos   <- unlist(lapply(dates, length)) # count the date posistions in each observation.
   n.date.pos <- TrueMode(date.pos) # choose the most common number.
-  dates <- unlist(dates)
-  dates <- as.integer(dates) # we should be left with integers given the gsub() call above.
+  dates      <- unlist(dates)
+  dates      <- as.integer(dates) # we should only have integers given the gsub() call above.
   if (n.date.pos == 1) {
     # Assume we have a year.
     date.format <- YearLength(dates)
   } else if (n.date.pos == 2) {
     # Assume we have a month and a year.
-    dates <- split(dates, 1:length(dates) %% 2 == 0)
-    date.pos1 <- as.vector(unlist(dates[1]))
-    date.pos2 <- as.vector(unlist(dates[2]))
+    dates       <- split(dates, 1:length(dates) %% 2 == 0)
+    date.pos1   <- UniqueOrder(dates[1])
+    date.pos2   <- UniqueOrder(dates[2])
     pos1.digits <- nchar(date.pos1) # how many characters
     pos2.digits <- nchar(date.pos2)
     pos1.digits <- max(pos1.digits) # take the max (months & days may only have 1 or 2)
@@ -55,11 +55,11 @@ GuessFormat <- function(x) {
       date.format <- -Inf # couldn't figure it out.
     }
   } else if (n.date.pos == 3) {
-    pos1 <- pos2 <- pos3 <- -1 # intialize
-    dates <- split(dates, 1:length(dates) %% 3 == 0)
+    pos1      <- pos2 <- pos3 <- -1 # intialize
+    dates     <- split(dates, 1:length(dates) %% 3 == 0)
     date.pos3 <- UniqueOrder(dates[2])
-    dates <- as.vector(unlist(dates[1]))
-    dates <- split(dates, 1:length(dates) %% 2 == 0)
+    dates     <- as.vector(unlist(dates[1]))
+    dates     <- split(dates, 1:length(dates) %% 2 == 0)
     date.pos1 <- UniqueOrder(dates[1])
     date.pos2 <- UniqueOrder(dates[2])
    
@@ -121,10 +121,10 @@ GuessFormat <- function(x) {
   }
   # Now get the times.
   if (has.times) {
-    times <- as.vector(unlist(split.date[2]))
-    times <- strsplit(times, "[:punct:]")
-    time.pos <- unlist(lapply(times, length)) # count the time posistions in each observation.
-    n.time.pos <- TrueMode(time.pos) # choose the most common number.
+    times      <- as.vector(unlist(split.date[2]))
+    times      <- strsplit(times, "[:punct:]")
+    time.pos   <- unlist(lapply(times, length)) # count each observation's time posistion
+    n.time.pos <- TrueMode(time.pos) # choose the most common number
     if (n.time.pos == 0) {
       time.format <- "" # no time
     } else if (n.time.pos == 1) {
@@ -138,8 +138,8 @@ GuessFormat <- function(x) {
   } else {
     guess.orders <- date.format
   }
-  formats <- guess_formats(x, guess.orders) # use {lubridate}'s format guesser.
-  formats <- table(formats) # count each format's frequency.
+  formats      <- guess_formats(x, guess.orders) # use {lubridate}'s format guesser
+  formats      <- table(formats) # count each format's frequency
   format.guess <- names(which.max(formats)) # pick the most common
   return(format.guess)
 }
