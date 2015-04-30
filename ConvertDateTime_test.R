@@ -20,7 +20,7 @@ for (i in 2:t.size) {
 # write.table(t, "scratch.csv", sep = ",", col.names = F, row.names = F)
 # open in Excel; change formats. Lots of formats.
 
-test.mat <- read.csv("scratch.csv", header = F, stringsAsFactors = F)
+test.mat <- read.csv("TestDates.csv", header = F, stringsAsFactors = F)
 convert.mat <- matrix(NA, nrow = nrow(test.mat), ncol = ncol(test.mat))
 convert.mat <- data.frame(convert.mat)
 colnames(convert.mat) <- colnames(test.mat)
