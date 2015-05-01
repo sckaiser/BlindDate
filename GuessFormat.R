@@ -1,9 +1,10 @@
 GuessFormat <- function(x) {
-  # Extends {lubridate}'s guess_formats to guess the orders argument, then picks the most common format.
+  # Guesses the orders argument of a character string representing dates.
+  # The orders argument is defined by {lubridate}'s parse_date_time().
   # Args:
-  # x, a character vector of dates.
+  #  x, a character vector of dates.
   # Returns:
-  # format.guess, a date-time format interpretable by strptime, etc.
+  #  format.guess, a date-time format interpretable by strptime, etc.
   x <- x[!is.na(x)] # when guessing the format, ignore NAs as they provide no clues and complicate downstream steps if kept.
   sample.size  <- 4000
   if (length(x) > sample.size) {
@@ -138,8 +139,14 @@ GuessFormat <- function(x) {
   } else {
     guess.orders <- date.format
   }
-  formats      <- guess_formats(x, guess.orders) # use {lubridate}'s format guesser
-  formats      <- table(formats) # count each format's frequency
-  format.guess <- names(which.max(formats)) # pick the most common
-  return(format.guess)
+  return(guess.orders)
+  
+  # The remaining code shouldn't be needed, since we only need the order.
+  # ConvertDateTime() calls parse_date_time(), which in turn calls guess_format.
+  # Calling guess_format here is redundant.
+  # It may add computation time; it certainly adds complexity.
+  # formats      <- guess_formats(x, guess.orders) # use {lubridate}'s format guesser
+  # formats      <- table(formats) # count each format's frequency
+  # format.guess <- names(which.max(formats)) # pick the most common
+  # return(format.guess)
 }
