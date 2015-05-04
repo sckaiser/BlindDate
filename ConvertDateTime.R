@@ -1,13 +1,13 @@
 ConvertDateTime <- function(x) {
-  # Continuing adventures in dates & times
+  # Converts a character vector of dates to a POSIXct vector.
   # Args:
-  #  x, a character vector
+  #  x, a character vector representing dates and possibly times
   # Returns:
-  #  x.date, a POSIX time vector
+  #  x.date, a POSIXct time vector
   x           <- RmDupSpace(x) # trim leading, trailing, and/or duplicate spaces
   sample.size <- 2000
   sample.size <- min(sample.size, length(x))
-  x.sample    <- x[sample(length(x), sample.size)]  # for speed, sample rather than computing all
+  x.sample    <- x[sample(length(x), sample.size)]  # sample for speed
   
   # Handle Month Text
   text.month <- ConvertTextMonth(x.sample, F)  # Get proportion of entries which match a text month
@@ -17,7 +17,7 @@ ConvertDateTime <- function(x) {
   }
   
   # Count mode number of spaces; if >1, replace (up to) the first two with -
-  # This makes the assumption that if there's one space, it separates date from time
+  # This assumes that if there's one space, it separates date from time
   # If there's >1 space, up to the first two separate date from time.
   # Clearly, more real-life examples are needed since this seems shaky.
   n.spaces    <- CountChars(x.sample, " ")  # check the sample.
