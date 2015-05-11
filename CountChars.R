@@ -9,14 +9,12 @@ CountChars <- function(x, y) {
   len.y  <- length(y)
   nchars <- nchar(y)
   if (len.y  != 1) {
-    print("Error: The second argument must be length 1.")
-    print(paste("It was length:", len.y))
-    stop()
+    err.txt <- paste("The 2nd argument must be length 1; it was length", len.y)
+    stop(err.txt)
   }
   if (nchars != 1) {
-    print("Error: The second argument must have exactly one character.")
-    print(paste("The argument provded had", nchars, "characters:", y))
-    stop()
+    err.txt <- paste("The 2nd argument must have one character; it had", nchars)
+    stop(err.txt)
   }
   
   x.char.y  <- gregexpr(y, x, fixed = T)  # get y's locations in x

@@ -8,8 +8,7 @@ MultiGsub <- function(patterns, replacements, x, ...) {
   #  x.new, the modified character vector.
   # TODO: replace the for-loop with an apply.
   if (length(patterns) != length(replacements)) {
-    print("Error: patterns and replacements have different lengths")
-    stop()
+    stop("Patterns and replacements have different lengths")
   }
   x.new <- x
   for (i in 1:length(patterns)) {
