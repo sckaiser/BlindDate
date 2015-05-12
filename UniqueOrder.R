@@ -1,9 +1,9 @@
 UniqueOrder <- function(x) {
   # 
   # Args:
-  #  x, a numeric vector (or a list of single-value numerics)
+  #  x, a vector (or a list of length-1 vectors)
   # Returns:
-  #  x, a numeric vector of unique, ordered values.
+  #  x, a vector of unique, ordered values.
   x <- unlist(x)     # convert from list if necessary
   x <- as.vector(x)  # drop names
   x <- unique(x)     # remove duplicates
