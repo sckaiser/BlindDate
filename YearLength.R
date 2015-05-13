@@ -3,6 +3,9 @@ YearLength <- function(date.pos) {
   # otherwise, returns Y (implying 3 or more digit years).
   year.digits <- nchar(date.pos) # count number of digits
   year.digits <- TrueMode(year.digits) # pick most common.
+  if (year.digits < 2) {
+    stop("The year argument had less than two digits")
+  }
   if (year.digits == 2) {
     date.format <- "y" 
   } else {
