@@ -2,9 +2,9 @@
 library(lubridate)
 library(stringr)
 setwd("C:/Users/scott_kaiser/Desktop/Analytics and Data Science/BlindDate")
-files <- c("ConvertDateTime.R", "ConvertTextMonth.R", "CountChars.R", "GreplAny.R",
-       "GuessFormat.R", "MultiGsub.R", "RmDupSpace.R", "SetPartition.R",
-       "TrueMode.R", "UniqueOrder.R", "YearLength.R")
+files <- c("ConvertDateTime.R", "ConvertTextMonth.R", "CountChars.R",
+           "GreplAny.R", "GuessFormat.R", "MultiGsub.R", "RmDupSpace.R",
+           "SetPartition.R", "TrueMode.R", "UniqueOrder.R", "YearLength.R")
 sapply(files, source)
 
 # start at midnight, January 1. Add 61 minutes successively
@@ -44,7 +44,8 @@ pass        <- sum(results)
 fail        <- total - pass
 overall     <- pass / total
 
-print(paste("Test passed on", overall, "percent of formats (", ncol(test.mat), ")"))
+results <- paste(overall, "percent of", ncol(test.mat) ,"formats passed.")
+print(results)
 if (overall < 1) {
   print("Test failed on", fail, "formats.")
   print("The first entry of each failed format is provided below:")
