@@ -2,7 +2,8 @@ MultiGsub <- function(patterns, replacements, x, ...) {
   # Replaces multiple patterns with multiple substitutions.
   # Args:
   #  patterns, a character vector of patterns to be matched.
-  #  replacements, a vector of replacements, corresponding to and of the same length as patterns.
+  #  replacements, a vector of replacements
+  #                corresponding to and of the same length as patterns.
   #  x, a character vector on which to find and replace.
   # Returns:
   #  x.new, the modified character vector.
