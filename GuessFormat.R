@@ -140,13 +140,4 @@ GuessFormat <- function(x) {
     guess.orders <- date.format
   }
   return(guess.orders)
-  
-  # The remaining code shouldn't be needed, since we only need the order.
-  # ConvertDateTime() calls parse_date_time(), which in turn calls guess_format.
-  # Calling guess_format here is redundant.
-  # It may add computation time; it certainly adds complexity.
-  # formats      <- guess_formats(x, guess.orders) # use {lubridate}'s format guesser
-  # formats      <- table(formats) # count each format's frequency
-  # format.guess <- names(which.max(formats)) # pick the most common
-  # return(format.guess)
 }
