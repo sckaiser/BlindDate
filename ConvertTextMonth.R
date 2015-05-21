@@ -8,30 +8,30 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
   #  if convert = T, a character vector with text months replaced by numbers.
   #  if convert = F, a numeric indicating the proportion of x with text months.
   # TODO: Handle ties.
-  m1 <- c("January", "February", "March", "April",
-          "May", "June", "July", "August",
-          "September", "October", "November", "December")
-  m2 <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
-          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-  m3 <- c("Janvier", "Fevrier", "Mars", "Avril",
-          "Mai", "Juin", "Juillet", "Aout",
-          "Septembre", "Octobre", "Novembre",
-          "Decembre")  # extensibility example
-  date.df <- data.frame(m1 = m1, m2 = m2, m3 = m3, stringsAsFactors = F)
+  m1         <- c("January", "February", "March", "April",
+                  "May", "June", "July", "August",
+                  "September", "October", "November", "December")
+  m2         <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+  m3         <- c("Janvier", "Fevrier", "Mars", "Avril",
+                  "Mai", "Juin", "Juillet", "Aout",
+                  "Septembre", "Octobre", "Novembre",
+                  "Decembre")  # extensibility example
+  date.df    <- data.frame(m1 = m1, m2 = m2, m3 = m3, stringsAsFactors = F)
   if (ignore.null) {
     # Handle various string synonyms for NA.
-    NA.synonyms <- c("", "NULL", "Not Applicable", "NA")
-    x[x %in% NA.synonyms] <- NA
+    NA.syn   <- c("", "NULL", "Not Applicable", "NA")
+    x[x %in% NA.syn] <- NA
   }
   # Find the best matching column.
-  matches     <- apply(date.df, 2, GreplAny, x, ignore.case = T)   # match months
-  matches     <- apply(matches, 2, sum)  # sum by column
-  denominator <- length(x)  # exclude NAs and null strings
+  matches    <- apply(date.df, 2, GreplAny, x, ignore.case = T)   # match months
+  matches    <- apply(matches, 2, sum)  # sum by column
+  denom      <- length(x)  # exclude NAs and null strings
   if (ignore.null) {
-    denominator <- length(x[!is.na(x)])
+    denom    <- length(x[!is.na(x)])
   }
-  matches  <- matches / denominator   # calculate the proportion of matches
-  best.col <- which.max(matches)  # select the highest
+  matches    <- matches / denom   # calculate the proportion of matches
+  best.col   <- which.max(matches)  # select the highest
   proportion.matched <- as.vector(matches[best.col])
   if (convert) {
     patterns <- date.df[ , best.col]
