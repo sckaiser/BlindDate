@@ -1,8 +1,9 @@
-ConvertDateTime <- function(x, t.format = "POSIXct") {
+ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   # Converts a character vector of dates to a POSIXct vector.
   # Args:
   #  x, a character vector representing dates and possibly times
   #  t.format, whether to return "POSIXct", or "POSIXlt"
+  #  tz,  timezone argument
   # Returns:
   #  x.date, a POSIX time vector
   x           <- RmDupSpace(x) # trim leading, trailing, and/or duplicate spaces
@@ -42,6 +43,9 @@ ConvertDateTime <- function(x, t.format = "POSIXct") {
     x.hour <- hour(x.date)  # get hours
     x.date[PM.times & x.hour != 12] <- x.date[PM.times & x.hour != 12] + (60 * 60 * 12)  # Add 12 hours to all PM times on or after 1PM.
     x.date[!PM.times & x.hour == 12 & !is.na(x.date)] <- x.date[!PM.times & x.hour == 12 & !is.na(x.date)] - (60 * 60 * 12)  # Subtract 12 hours from all PM times before 1AM.
+  }
+  if (tz != "UTC") {
+    x.date <- force_tz(x.date, tzone = tz)  # change the timezone, if requested
   }
   if (t.format == "POSIXlt") {
     x.date <- as.POSIXlt(x.date)  # convert if requested
