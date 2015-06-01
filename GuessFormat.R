@@ -24,7 +24,7 @@ GuessFormat <- function(x) {
   date.sep   <- paste(date.sep, collapse = "") # combine
   date.sep   <- str_split(date.sep, pattern = "") # split into individual characters
   date.sep   <- table(date.sep) # count how often each character appears
-  date.sep   <- names(which.max(date.sep)) # pick the most frequent
+  date.sep   <- names(WhichMax(date.sep)) # pick the most frequent
   if (date.sep != "") {  # handle year-only case: x = c(2014, 2015, ...)
     dates    <- strsplit(dates, date.sep) # split on the presumed separator. 
   }
