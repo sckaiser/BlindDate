@@ -31,7 +31,7 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
     denom    <- length(x[!is.na(x)])
   }
   matches    <- matches / denom   # calculate the proportion of matches
-  best.col   <- which.max(matches)  # select the highest
+  best.col   <- WhichMax(matches)  # select the highest
   proportion.matched <- as.vector(matches[best.col])
   if (convert) {
     patterns <- date.df[ , best.col]
