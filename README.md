@@ -6,8 +6,8 @@ Despite useful packages like lubridate and zoo, dates and times still remain cha
 I encountered a challenge where my data source would not reliabily return the same date-time format.
 So I looked for a package that would 'guess' the date-time format.
 While {lubridate}'s guess_formats() is a start, it still requires you to supply the order of the month, day, and year sub-objects.
-That didn't work with the formats I was receiving. This project does use guess_formats() to parse delimiters.
-I also tried {TimeDate}'s whichFormat() but it did not work for me.
+The formats I receive lacked a predictable order. This project does use {lubridate}'s parse_date_time() to parse delimiters.
+I also tried {TimeDate}'s whichFormat() but it did not work for my data formats.
 
 ## Scope
 This project focuses on figuring out date-time formats from about 1970 forward.
