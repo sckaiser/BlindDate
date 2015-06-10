@@ -5,7 +5,7 @@ GuessFormat <- function(x) {
   #  x, a character vector of dates.
   # Returns:
   #  format.guess, a date-time format interpretable by strptime, etc.
-  x <- x[!is.na(x)] # when guessing the format, ignore NAs as they provide no clues and complicate downstream steps if kept.
+  x <- x[!is.na(x)] # when guessing the format, ignore NAs & blanks as they provide no clues and complicate downstream steps if kept.
   sample.size  <- 4000
   if (length(x) > sample.size) {
     x <- x[sample(length(x), sample.size)] # sample for speed
@@ -24,7 +24,7 @@ GuessFormat <- function(x) {
   date.sep   <- paste(date.sep, collapse = "") # combine
   date.sep   <- str_split(date.sep, pattern = "") # split into individual characters
   date.sep   <- table(date.sep) # count how often each character appears
-  date.sep   <- names(WhichMax(date.sep)) # pick the most frequent
+  date.sep   <- names(date.sep[WhichMax(date.sep)]) # pick the most frequent 
   if (date.sep != "") {  # handle year-only case: x = c(2014, 2015, ...)
     dates    <- strsplit(dates, date.sep) # split on the presumed separator. 
   }
