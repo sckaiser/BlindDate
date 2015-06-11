@@ -5,7 +5,7 @@ GuessFormat <- function(x) {
   #  x, a character vector of dates.
   # Returns:
   #  format.guess, a date-time format interpretable by strptime, etc.
-  x <- x[!is.na(x)] # when guessing the format, ignore NAs & blanks as they provide no clues and complicate downstream steps if kept.
+  x <- x[!is.na(x) & x != "" & x != " " & x != "NA"] # when guessing the format, ignore NAs & blanks as they provide no clues and complicate downstream steps if kept.
   sample.size  <- 4000
   if (length(x) > sample.size) {
     x <- x[sample(length(x), sample.size)] # sample for speed
