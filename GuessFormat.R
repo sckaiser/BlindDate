@@ -1,10 +1,11 @@
 GuessFormat <- function(x) {
   # Guesses the orders argument of a character string representing dates.
-  # The orders argument is defined by {lubridate}'s parse_date_time().
   # Args:
   #  x, a character vector of dates.
   # Returns:
-  #  format.guess, a date-time format interpretable by strptime, etc.
+  #  guess.orders, the sequence of year, month, day, hour, minute, and second 
+  #     or some subset; interpretable by {lubridate}'s parse_date_time().
+  
   x <- x[!is.na(x) & x != "" & x != " " & x != "NA"] # when guessing the format, ignore NAs & blanks as they provide no clues and complicate downstream steps if kept.
   sample.size  <- 4000
   if (length(x) > sample.size) {
