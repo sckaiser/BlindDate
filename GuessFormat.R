@@ -27,7 +27,8 @@ GuessFormat <- function(x) {
   date.sep   <- table(date.sep) # count how often each character appears
   date.sep   <- names(date.sep[WhichMax(date.sep)]) # pick the most frequent 
   if (date.sep != "") {  # handle year-only case: x = c(2014, 2015, ...)
-    dates    <- strsplit(dates, date.sep) # split on the presumed separator. 
+    dates    <- strsplit(dates, date.sep) # split on the presumed separator.
+    dates     <- lapply(dates, str_replace_all, "[^[:digit:]]", "")  # remove any remaining non-digits
   }
   date.pos   <- unlist(lapply(dates, length)) # count the date posistions in each observation.
   n.date.pos <- TrueMode(date.pos) # choose the most common number.
