@@ -36,7 +36,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   x <- gsub("AM", "", x)  # Remove AM
   
   # Guess the format.
-  date.format <- GuessFormat(x)  # Guess format.
+  date.format <- GuessFormat(x.sample)  # Guess format.
   # print(date.format)  # debug
   x.date      <- parse_date_time(x, orders = date.format)  # lubridate convert.
   if (any(PM.times)) {  # if we had any PM times, fix them.
