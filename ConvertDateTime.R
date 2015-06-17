@@ -7,7 +7,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   # Returns:
   #  x.date, a POSIX time vector
   x           <- RmDupSpace(x) # trim leading, trailing, and/or duplicate spaces
-  sample.size <- 2000
+  sample.size <- 4000
   sample.size <- min(sample.size, length(x))
   x.sample    <- x[sample(length(x), sample.size)]  # sample for speed
   
