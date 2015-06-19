@@ -25,13 +25,17 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
   }
   # Find the best matching column.
   matches    <- apply(date.df, 2, GreplAny, x, ignore.case = T)   # match months
-  matches    <- apply(matches, 2, sum)  # sum by column
+  if (!is.matrix(matches)) {
+    matches    <- as.integer(matches)  # if only 1 row, convert it
+  } else {
+    matches    <- apply(matches, 2, sum)  # sum by column
+  }
   denom      <- length(x)  # exclude NAs and null strings
   if (ignore.null) {
     denom    <- length(x[!is.na(x)])
   }
   matches    <- matches / denom   # calculate the proportion of matches
-  best.col   <- WhichMax(matches)  # select the highest
+  best.col   <- WhichMax(matches)  # select the highest, breaking ties randomly
   proportion.matched <- as.vector(matches[best.col])
   if (convert) {
     patterns <- date.df[ , best.col]
