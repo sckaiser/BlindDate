@@ -22,6 +22,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   # This assumes that if there's one space, it separates date from time
   # If there's >1 space, up to the first two separate date from time.
   # Clearly, more real-life examples are needed since this seems shaky.
+  
   n.spaces    <- CountChars(x.sample, " ")  # check the sample.
   mode.spaces <- TrueMode(n.spaces)
   if (mode.spaces > 1) {
@@ -36,7 +37,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   x <- gsub("AM", "", x)  # Remove AM
   
   # Guess the format.
-  date.format <- GuessFormat(x.sample)  # Guess format.
+  date.format <- GuessFormat(x.sample, sample.size)  # Guess format.
   # print(date.format)  # debug
   x.date      <- parse_date_time(x, orders = date.format)  # lubridate convert.
   if (any(PM.times)) {  # if we had any PM times, fix them.
