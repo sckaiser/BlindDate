@@ -11,8 +11,8 @@ GuessFormat <- function(x, sample.size = length(x)) {
   if (length(x) > sample.size) {
     x <- x[sample(length(x), sample.size)] # sample for speed
   }
-  space.count  <- sum(grepl(" ", x))
-  has.times    <- ifelse(space.count > .5 * length(x), T, F)
+  n.elements   <- CountElements(x)
+  has.times    <- ifelse(n.elements > 3, T, F)  # assume first 3 are dates.
   if (has.times) {
     split.date <- strsplit(x, " ") # assume date-time separated by " "
     split.date <- unlist(split.date)
