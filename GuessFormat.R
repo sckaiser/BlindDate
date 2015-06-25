@@ -28,10 +28,9 @@ GuessFormat <- function(x, sample.size = length(x)) {
   date.sep   <- names(date.sep[WhichMax(date.sep)]) # pick the most frequent 
   if (date.sep != "") {  # handle year-only case: x = c(2014, 2015, ...)
     dates    <- strsplit(dates, date.sep) # split on the presumed separator.
-    dates     <- lapply(dates, str_replace_all, "[^[:digit:]]", "")  # remove any remaining non-digits
+    dates    <- lapply(dates, str_replace_all, "[^[:digit:]]", "")  # remove any remaining non-digits
   }
-  date.pos   <- unlist(lapply(dates, length)) # count the date posistions in each observation.
-  n.date.pos <- TrueMode(date.pos) # choose the most common number.
+  n.date.pos <- min(n.elements, 3)  # assume up to first 3 are dates.
   dates      <- unlist(dates)
   dates      <- as.integer(dates) # we should only have integers given the gsub() call above.
   if (n.date.pos == 1) {
