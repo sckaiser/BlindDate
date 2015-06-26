@@ -123,10 +123,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
   }
   # Now get the times.
   if (has.times) {
-    times      <- as.vector(unlist(split.date[2]))
-    times      <- strsplit(times, "[:punct:]")
-    time.pos   <- unlist(lapply(times, length)) # count each observation's time posistion
-    n.time.pos <- TrueMode(time.pos) # choose the most common number
+    n.time.pos <- n.elements - 3  # first 3 are dates
     if (n.time.pos == 0) {
       time.format <- "" # no time
     } else if (n.time.pos == 1) {
