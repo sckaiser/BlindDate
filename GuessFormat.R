@@ -12,7 +12,8 @@ GuessFormat <- function(x, sample.size = length(x)) {
     x <- x[sample(length(x), sample.size)] # sample for speed
   }
   n.elements   <- CountElements(x)
-  has.times    <- ifelse(n.elements > 3, T, F)  # assume first 3 are dates.
+  date.len     <- 3  # assume up to the first 3 elements are dates
+  has.times    <- ifelse(n.elements > date.len, T, F)  # more elements = times
   if (has.times) {
     split.date <- strsplit(x, " ") # assume date-time separated by " "
     split.date <- unlist(split.date)
@@ -123,7 +124,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
   }
   # Now get the times.
   if (has.times) {
-    n.time.pos <- n.elements - 3  # first 3 are dates
+    n.time.pos <- n.elements - date.len  # first 3 are dates
     if (n.time.pos == 0) {
       time.format <- "" # no time
     } else if (n.time.pos == 1) {
