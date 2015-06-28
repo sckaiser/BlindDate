@@ -11,7 +11,7 @@ sapply(files, source)
 # start at midnight, January 1. Add 61 minutes successively
 t.size     <- 24 * 365
 start.date <- as.POSIXct("01-01-2015 00:00:00", format = "%m-%d-%Y %H:%M:%S")
-t <- rep(start.date, t.size)
+t          <- rep(start.date, t.size)
 increment  <- 61 * 60  # increment just more than an hour to generate more times
 for (i in 2:t.size) {
   t[i] <- t[i - 1] + increment
@@ -23,7 +23,7 @@ for (i in 2:t.size) {
 
 test.mat    <- read.csv("TestDates.csv", header = F, stringsAsFactors = F)
 convert.mat <- matrix(NA, nrow = nrow(test.mat), ncol = ncol(test.mat))
-convert.mat <- data.frame(convert.mat)
+convert.mat           <- data.frame(convert.mat)
 colnames(convert.mat) <- colnames(test.mat)
 
 for (i in 1:ncol(test.mat)) {
