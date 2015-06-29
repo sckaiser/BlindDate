@@ -6,7 +6,7 @@ Despite useful packages like lubridate and zoo, dates and times still remain cha
 I encountered a challenge where my data source would not reliabily return the same date-time format.
 So I looked for a package that would 'guess' the date-time format.
 While {lubridate}'s guess_formats() is a start, it still requires you to supply the order of the month, day, and year sub-objects.
-The formats I receive lacked a predictable order. This project does use {lubridate}'s parse_date_time() to parse delimiters.
+The formats I receive lack a predictable order. This project does use {lubridate}'s parse_date_time() to parse delimiters.
 I also tried {TimeDate}'s whichFormat() but it did not work for my data formats.
 
 ## Scope
@@ -22,6 +22,9 @@ using contextual clues: four digits are most likely a year;
 a subcomponent that spans 1-31 inclusive is probably a day;
 times are almost always in the order HMS; and so on.
 
+## Getting Started
+A [digraph of functional relationships](https://github.com/sckaiser/BlindDate/blob/master/Digraph_functions.png) is provided to help visualize the code; I update it on an ad hoc basis.
+
 ## Dependencies
 lubridate
 stringr
@@ -29,7 +32,6 @@ stringr
 ## Style
 This project aims to follow Google's R Style Guide:
 https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml
-
 
 
 ### My employer requires the following notice:
