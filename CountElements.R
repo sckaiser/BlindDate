@@ -1,11 +1,11 @@
 CountElements <- function(x) {
-  # Counts the number of distinct elements in a character string.
-  # An element is a sequence of adjacent numbers or characters, exluduing
-  # punctuation and spaces.
+  # Counts the number of elements in a character string. An element is defined
+  # as a sequence of adjacent numbers or characters, exluduing punctuation and
+  # spaces.
   # Args:
   #  x, a character vector
   # Returns:
-  #  y, an integer value of the number of elements found.
+  #  y, an integer: the most frequent number of elements found.
   
   x <- gsub("[[:punct:]]", " ", x)  # use a single, common separtor
   x <- gsub("[:blank:]", " ", x)  # ditto
