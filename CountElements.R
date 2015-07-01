@@ -7,10 +7,7 @@ CountElements <- function(x) {
   # Returns:
   #  y, an integer: the most frequent number of elements found.
   
-  x <- gsub("[[:punct:]]", " ", x)  # use a single, common separtor
-  x <- gsub("[:blank:]", " ", x)  # ditto
-  x <- RmDupSpace(x)  # handle Oxford comma
-  x <- str_split(x, " ")  # list of original x, each with elements in a vector
+  x <- TokenizeDt(x)  # tokenize to a list of character vectors (elements)
   y <- lapply(x, length)  # count elements in each x
   y <- unlist(y)
   TrueMode(y)  # return the most common.
