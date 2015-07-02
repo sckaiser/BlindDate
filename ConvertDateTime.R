@@ -18,19 +18,6 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
     x.sample <- x[sample(length(x), sample.size)]  # resample
   }
   
-  # Count mode number of spaces; if >1, replace (up to) the first two with -
-  # This assumes that if there's one space, it separates date from time
-  # If there's >1 space, up to the first two separate date from time.
-  # Clearly, more real-life examples are needed since this seems shaky.
-  
-  n.spaces    <- CountChars(x.sample, " ")  # check the sample.
-  mode.spaces <- TrueMode(n.spaces)
-  if (mode.spaces > 1) {
-    n.spaces <- CountChars(x, " ")  # find which entries have multiple spaces
-    x[n.spaces > 1] <- sub(" ", "-", x[n.spaces > 1])  # replace any first occurrences
-    x[n.spaces > 2] <- sub(" ", "-", x[n.spaces > 2])  # replace any second occurrences
-  }
-  
   # Handle AM and PM text.
   PM.times <- grepl("PM", x)  # store vector of which times are PM
   x <- gsub("PM", "", x)  # Remove PM
