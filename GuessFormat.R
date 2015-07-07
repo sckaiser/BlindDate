@@ -20,18 +20,10 @@ GuessFormat <- function(x, sample.size = length(x)) {
     split.date <- split(split.date, 1:length(split.date) %% 2 == 0) # pick every other element
     dates      <- as.vector(unlist(split.date[1]))
   } else {
-    dates    <- x
-  }
-  date.sep   <- gsub("[0123456789]", "", dates) # str_split([:punct:]) isn't working, causing the next 3 LoC:
-  date.sep   <- paste(date.sep, collapse = "") # combine
-  date.sep   <- str_split(date.sep, pattern = "") # split into individual characters
-  date.sep   <- table(date.sep) # count how often each character appears
-  date.sep   <- names(date.sep[WhichMax(date.sep)]) # pick the most frequent 
-  if (date.sep != "") {  # handle year-only case: x = c(2014, 2015, ...)
-    dates    <- strsplit(dates, date.sep) # split on the presumed separator.
-    dates    <- lapply(dates, str_replace_all, "[^[:digit:]]", "")  # remove any remaining non-digits
+    dates      <- x
   }
   n.date.pos <- min(n.elements, 3)  # assume up to first 3 are dates.
+  dates      <- TokenizeDt(dates)  # creaet a list of vectors of date elements
   dates      <- unlist(dates)
   dates      <- as.integer(dates) # we should only have integers given the gsub() call above.
   if (n.date.pos == 1) {
