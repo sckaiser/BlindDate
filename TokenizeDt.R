@@ -9,5 +9,6 @@ TokenizeDt <- function(x) {
   x <- gsub("[[:punct:]]", " ", x)  # use a single, common separtor
   x <- gsub("[:blank:]", " ", x)  # ditto
   x <- RmDupSpace(x)  # handle Oxford comma
-  str_split(x, " ")  # list of original x, each with elements in a vector
+  x <- str_split(x, " ")  # list of original x, each with elements in a vector
+  lapply(x, str_replace_all, "[^[:digit:]]", "")  # remove any last non-digits
 }
