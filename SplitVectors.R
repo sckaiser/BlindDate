@@ -10,10 +10,10 @@ SplitVectors <- function(x, n) {
   
   if (n > 1) {
     seq1        <- seq(1, length(x) + 1 - n, by = n)  # first splitting sequence 
-    vect.list   <- list(seq1)
+    seq.list   <- list(seq1)
     for (i in 2:n) {
-      seqx      <- vect.list[[i - 1]] + 1  # create subsequent sequences
-      vect.list <- list(vect.list, seqx)
+      seqx      <- seq.list[[i - 1]] + 1  # create subsequent sequences
+      seq.list <- c(seq.list, list(seqx))
       # TODO: actually split the vector
     }
   } else {
@@ -21,6 +21,8 @@ SplitVectors <- function(x, n) {
   }
   return(vect.list)
 }
+
+IdxHelper <- function(idx, x) x[idx]  # subsets a vector x using idx
 
 x <- c(12, 1, 2015, 11, 29, 2015, 10, 31, 2015)
 n <- 3
