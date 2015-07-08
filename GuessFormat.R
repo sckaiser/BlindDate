@@ -7,7 +7,8 @@ GuessFormat <- function(x, sample.size = length(x)) {
   #  guess.orders, the sequence of year, month, day, hour, minute, and second 
   #     or some subset; interpretable by {lubridate}'s parse_date_time().
   
-  x <- x[!is.na(x) & x != "" & x != " " & x != "NA"] # when guessing the format, ignore NAs & blanks as they provide no clues and complicate downstream steps if kept.
+  # ignore NAs & blanks which provide no clues and complicate downstream steps:
+  x <- x[!is.na(x) & x != "" & x != " " & x != "NA"]
   if (length(x) > sample.size) {
     x <- x[sample(length(x), sample.size)] # sample for speed
   }
@@ -22,10 +23,10 @@ GuessFormat <- function(x, sample.size = length(x)) {
   } else {
     dates      <- x
   }
-  n.date.pos <- min(n.elements, 3)  # assume up to first 3 are dates.
-  dates      <- TokenizeDt(dates)  # creaet a list of vectors of date elements
-  dates      <- unlist(dates)
-  dates      <- as.integer(dates) # we should only have integers given the gsub() call above.
+  n.date.pos   <- min(n.elements, 3)  # assume up to first 3 are dates.
+  dates        <- TokenizeDt(dates)  # create a list of vectors of date elements
+  dates        <- unlist(dates)
+  dates        <- as.integer(dates)  # the TokenizeDt() call ensures integers
   if (n.date.pos == 1) {
     # Assume we have a year.
     date.format <- YearLength(dates)
@@ -126,7 +127,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
     } else if (n.time.pos == 3) {
       time.format <- "hms" # h:m:s
     }
-    guess.orders <- paste0(date.format, time.format) # concatenate the date & time formats
+    guess.orders <- paste0(date.format, time.format) # merge date & time formats
   } else {
     guess.orders <- date.format
   }
