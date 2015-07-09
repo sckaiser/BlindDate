@@ -10,6 +10,10 @@ SplitVectors <- function(x, n) {
   
   IdxHelper <- function(idx, x) x[idx]  # subsets a vector x using idx
   
+  if (length(x) %% n != 0) {
+    warning("input length was not a multiple of the number of splits")
+  }
+  
   if (n > 1) {
     seq1        <- seq(1, length(x) + 1 - n, by = n)  # first splitting sequence 
     seq.list    <- list(seq1)
