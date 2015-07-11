@@ -12,31 +12,31 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   x.sample    <- x[sample(length(x), sample.size)]  # sample for speed
   
   # Handle Month Text
-  text.month <- ConvertTextMonth(x.sample, F)  # Get proportion of entries which match a text month
+  text.month  <- ConvertTextMonth(x.sample, F)  # proportion of entries with a text month
   if (text.month > .95) {  # if more than 95% have text months...
-    x <- ConvertTextMonth(x)  # ...then convert to numeric months
-    x.sample <- x[sample(length(x), sample.size)]  # resample
+    x         <- ConvertTextMonth(x)  # ...then convert to numeric months
+    x.sample  <- x[sample(length(x), sample.size)]  # resample
   }
   
   # Handle AM and PM text.
-  PM.times <- grepl("PM", x)  # store vector of which times are PM
-  x <- gsub("PM", "", x)  # Remove PM
-  x <- gsub("AM", "", x)  # Remove AM
+  PM.times     <- grepl("PM", x)  # store vector of which times are PM
+  x            <- gsub("PM", "", x)  # Remove PM
+  x            <- gsub("AM", "", x)  # Remove AM
   
   # Guess the format.
-  date.format <- GuessFormat(x.sample, sample.size)  # Guess format.
+  date.format  <- GuessFormat(x.sample, sample.size)  # Guess format
   # print(date.format)  # debug
-  x.date      <- parse_date_time(x, orders = date.format)  # lubridate convert.
+  x.date       <- parse_date_time(x, orders = date.format)  # lubridate convert
   if (any(PM.times)) {  # if we had any PM times, fix them.
-    x.hour <- hour(x.date)  # get hours
+    x.hour     <- hour(x.date)  # get hours
     x.date[PM.times & x.hour != 12] <- x.date[PM.times & x.hour != 12] + (60 * 60 * 12)  # Add 12 hours to all PM times on or after 1PM.
     x.date[!PM.times & x.hour == 12 & !is.na(x.date)] <- x.date[!PM.times & x.hour == 12 & !is.na(x.date)] - (60 * 60 * 12)  # Subtract 12 hours from all PM times before 1AM.
   }
   if (tz != "UTC") {
-    x.date <- force_tz(x.date, tzone = tz)  # change the timezone, if requested
+    x.date     <- force_tz(x.date, tzone = tz)  # change the timezone, if requested
   }
   if (t.format == "POSIXlt") {
-    x.date <- as.POSIXlt(x.date)  # convert if requested
+    x.date     <- as.POSIXlt(x.date)  # convert if requested
   }
   return(x.date)
 }
