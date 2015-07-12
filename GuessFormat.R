@@ -52,13 +52,11 @@ GuessFormat <- function(x, sample.size = length(x)) {
     }
   } else if (n.date.pos == 3) {
     pos1      <- pos2 <- pos3 <- -1 # intialize
-    dates     <- split(dates, 1:length(dates) %% 3 == 0)
-    date.pos3 <- UniqueOrder(dates[2])
-    dates     <- as.vector(unlist(dates[1]))
-    dates     <- split(dates, 1:length(dates) %% 2 == 0)
-    date.pos1 <- UniqueOrder(dates[1])
-    date.pos2 <- UniqueOrder(dates[2])
-   
+    dates     <- SplitVectors(dates, n.date.pos)
+    dates     <- lapply(dates, UniqueOrder)
+    date.pos1 <- dates[[1]]
+    date.pos2 <- dates[[2]]
+    date.pos3 <- dates[[3]]
     # We could be more conservative & assume if we have fairly big data that we'll see all months & days.
     # But for now, just look for ranges.
     # If exactly only one position is between 1 and 12, assign that as the month.
