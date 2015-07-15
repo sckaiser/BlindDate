@@ -1,15 +1,18 @@
 SplitVectors <- function(x, n) {
-  # Splits a vector, or a list of vectors, into separate vectors. This can be
+  # Splits a vector into a list of separate vectors. This can be
   # used in processing dates to convert, e.g. a d1-m1-y1, d2-m2-y2, ... 
   # structure into a d1, d2, ... a m1, m2, ... and a y1, y2, ... structure.
   # Args:
-  #  x, a vector or a list of vectors.
+  #  x, a vector.
   #  n, the intger number of new vectors into which x should be split.
   # Returns:
   #  a length-n list of vectors.
   
   IdxHelper <- function(idx, x) x[idx]  # subsets a vector x using idx
   
+  if (!is.vector(x)) {
+    stop("The object supplied wasn't a vector")
+  }
   if (length(x) %% n != 0) {
     warning("input length was not a multiple of the number of splits")
   }
