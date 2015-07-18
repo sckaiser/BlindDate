@@ -17,9 +17,12 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
                   "Mai", "Juin", "Juillet", "Aout",
                   "Septembre", "Octobre", "Novembre",
                   "Decembre")  # extensibility example
+  # Abbreviations must come after, i.e. be to the right of, the full months to
+  # which they correspond. The matching logic requires this sequence.
+  
   date.df    <- data.frame(m1 = m1, m2 = m2, m3 = m3, stringsAsFactors = F)
   if (ignore.null) {
-    # Handle various string synonyms for NA.
+    # Handle string synonyms for NA.
     NA.syn   <- c("", "NULL", "Not Applicable", "NA")
     x[x %in% NA.syn] <- NA
   }
@@ -35,7 +38,7 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
     denom    <- length(x[!is.na(x)])
   }
   matches    <- matches / denom   # calculate the proportion of matches
-  best.col   <- WhichMax(matches)  # select the highest, breaking ties randomly
+  best.col   <- which.max(matches)  # pick the highest; if tied, pick the first
   proportion.matched <- as.vector(matches[best.col])
   if (convert) {
     patterns <- date.df[ , best.col]
