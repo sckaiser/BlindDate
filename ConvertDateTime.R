@@ -15,13 +15,13 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   text.month  <- ConvertTextMonth(x.sample, F)  # proportion of entries with a text month
   if (text.month > .95) {  # if more than 95% have text months...
     x         <- ConvertTextMonth(x)  # ...then convert to numeric months
-    x.sample  <- x[sample(length(x), sample.size)]  # resample
   }
   
   # Handle AM and PM text.
   PM.times     <- grepl("PM", x)  # store vector of which times are PM
   x            <- gsub("PM", "", x)  # Remove PM
   x            <- gsub("AM", "", x)  # Remove AM
+  x.sample     <- x[sample(length(x), sample.size)]  # resample
   
   # Guess the format.
   date.format  <- GuessFormat(x.sample, sample.size)  # Guess format
