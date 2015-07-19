@@ -2,11 +2,8 @@
 library(lubridate)
 library(stringr)
 setwd("C:/Users/scott_kaiser/Desktop/Analytics and Data Science/BlindDate")
-files <- c("ConvertDateTime.R", "ConvertTextMonth.R", "CountChars.R",
-           "CountElements.R", "GreplAny.R", "GuessFormat.R", "MultiGsub.R",
-           "RmDupSpace.R", "SetPartition.R", "SplitVectors.R", "TokenizeDt.R",
-           "TrueMode.R", "UniqueOrder.R", "WhichMax.R", "YearLength.R")
-sapply(files, source)
+source("SourceDir.R")
+SourceDir(exclude = c("format utility.R", "ConvertDateTime_test.R"))
 
 # start at midnight, January 1. Add 61 minutes successively
 t.size     <- 24 * 365
