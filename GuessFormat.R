@@ -14,27 +14,21 @@ GuessFormat <- function(x, sample.size = length(x)) {
   }
   n.elements   <- CountElements(x)
   date.len     <- 3  # assume up to the first 3 elements are dates
+  n.date.pos   <- min(n.elements, date.len)  # assume up to first 3 are dates.
   has.times    <- ifelse(n.elements > date.len, T, F)  # more elements = times
-  if (has.times) {
-    split.date <- strsplit(x, " ") # assume date-time separated by " "
-    split.date <- unlist(split.date)
-    split.date <- split(split.date, 1:length(split.date) %% 2 == 0) # pick every other element
-    dates      <- as.vector(unlist(split.date[1]))
-  } else {
-    dates      <- x
-  }
-  n.date.pos   <- min(n.elements, 3)  # assume up to first 3 are dates.
-  dates        <- TokenizeDt(dates)  # create a list of vectors of date elements
-  dates        <- unlist(dates)
-  dates        <- as.integer(dates)  # the TokenizeDt() call ensures integers
+  x            <- TokenizeDt(x)  # create a list of vectors of date elements
+  x            <- unlist(x)
+  dates        <- SplitVectors(x, n.elements)
+  dates        <- lapply(dates, as.integer)  # TokenizeDt() ensures integers
+  dates        <- lapply(dates, UniqueOrder)
+  date.pos1    <- dates[[1]]
+  date.pos2    <- ListExtract(dates, 2)
+  date.pos3    <- ListExtract(dates, 3)
   if (n.date.pos == 1) {
     # Assume we have a year.
     date.format <- YearLength(dates)
   } else if (n.date.pos == 2) {
     # Assume we have a month and a year.
-    dates       <- split(dates, 1:length(dates) %% 2 == 0)
-    date.pos1   <- UniqueOrder(dates[1])
-    date.pos2   <- UniqueOrder(dates[2])
     pos1.digits <- nchar(date.pos1) # how many characters
     pos2.digits <- nchar(date.pos2)
     pos1.digits <- max(pos1.digits) # take the max (months & days may only have 1 or 2)
@@ -52,11 +46,6 @@ GuessFormat <- function(x, sample.size = length(x)) {
     }
   } else if (n.date.pos == 3) {
     pos1      <- pos2 <- pos3 <- -1 # intialize
-    dates     <- SplitVectors(dates, n.date.pos)
-    dates     <- lapply(dates, UniqueOrder)
-    date.pos1 <- dates[[1]]
-    date.pos2 <- dates[[2]]
-    date.pos3 <- dates[[3]]
     # We could be more conservative & assume if we have fairly big data that we'll see all months & days.
     # But for now, just look for ranges.
     # If exactly only one position is between 1 and 12, assign that as the month.
