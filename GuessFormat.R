@@ -14,7 +14,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
   }
   n.elements   <- CountElements(x)
   date.len     <- 3  # assume up to the first 3 elements are dates
-  n.date.pos   <- min(n.elements, date.len)  # assume up to first 3 are dates.
+  n.date.pos   <- min(n.elements, date.len)  # assume up to first 3 are dates
   has.times    <- ifelse(n.elements > date.len, T, F)  # more elements = times
   x            <- TokenizeDt(x)  # create a list of vectors of date elements
   x            <- unlist(x)
@@ -45,10 +45,10 @@ GuessFormat <- function(x, sample.size = length(x)) {
       date.format <- -Inf # couldn't figure it out.
     }
   } else if (n.date.pos == 3) {
-    pos1      <- pos2 <- pos3 <- -1 # intialize
-    # We could be more conservative & assume if we have fairly big data that we'll see all months & days.
-    # But for now, just look for ranges.
-    # If exactly only one position is between 1 and 12, assign that as the month.
+    pos1   <- pos2 <- pos3 <- -1 # intialize
+    # We could be more conservative & assume that if we have fairly big data 
+    # then we'll see all months & days; but for now, just look for ranges.
+    # If exactly one position is between 1 and 12, assign that as the month.
     if ((min(date.pos1) >= 1 & max(date.pos1) <= 12) & !(min(date.pos2) >= 1 & max(date.pos2) <= 12) & !(min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
       pos1 <- "m"
     } else if (!(min(date.pos1) >= 1 & max(date.pos1) <= 12) & (min(date.pos2) >= 1 & max(date.pos2) <= 12) & !(min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
@@ -56,8 +56,9 @@ GuessFormat <- function(x, sample.size = length(x)) {
     } else if (!(min(date.pos1) >= 1 & max(date.pos1) <= 12) & !(min(date.pos2) >= 1 & max(date.pos2) <= 12) & (min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
       pos3 <- "m"
     }
-    # If exactly only one position is between 1 and 31, assign that as the month.
-    # Note that this will not be able to classify conditions when all date positions are between 1 & 12, i.e., 1/11/10, 1/12/12, 12/01/01, etc.)
+    # If exactly one position is between 1 and 31, assign that as the month.
+    # Note that this will be unable to classify cases where all date positions
+    # are between 1 & 12, i.e., 1/11/10, 1/12/12, etc.)
     if ((min(date.pos1) >= 1 & max(date.pos1) > 12 & max(date.pos1) <= 31) & !(min(date.pos2) >= 1 & max(date.pos2) > 12 & max(date.pos2) <= 31) & !(min(date.pos3) >= 1 & max(date.pos3) > 12 & max(date.pos3) <= 31)) {
       pos1 <- "d"
     } else if (!(min(date.pos1) >= 1 & max(date.pos1) > 12 & max(date.pos1) <= 31) & (min(date.pos2) >= 1 & max(date.pos2) > 12 & max(date.pos2) <= 31) & !(min(date.pos3) >= 1 & max(date.pos3) > 12 & max(date.pos3) <= 31)) {
@@ -66,10 +67,12 @@ GuessFormat <- function(x, sample.size = length(x)) {
       pos3 <- "d"
     }
     
-    # One way to further improve would be to check for four digit dates, and if any are found, classify the year.
-    # Another improvement, we could look and see if only one position is missing, and assign it.
+    # One way to further improve would be to check for four digit dates,
+    # and if any are found, classify the year. Another improvement, we could
+    # look and see if only one position is missing, and assign it.
     
-    # If the following steps could classify exactly 1 position, be more flexible for the last two:
+    # If the following steps could classify exactly 1 position,
+    # be more flexible for the last two:
     # If we can only ID the month...
     # And of the remaining, 1 has 1:31 and the other does not...
     # ...then assign 1:31 the day.
@@ -100,11 +103,11 @@ GuessFormat <- function(x, sample.size = length(x)) {
       year.format <- YearLength(year.dates)
       assign(year.pos, year.format)
     }
-    date.format <- paste0(pos1, pos2, pos3)   # final date assignment
+    date.format   <- paste0(pos1, pos2, pos3)   # final date assignment
   }
   # Now get the times.
   if (has.times) {
-    n.time.pos <- n.elements - date.len  # first 3 are dates
+    n.time.pos    <- n.elements - date.len  # first 3 are dates
     if (n.time.pos == 0) {
       time.format <- "" # no time
     } else if (n.time.pos == 1) {
@@ -114,9 +117,9 @@ GuessFormat <- function(x, sample.size = length(x)) {
     } else if (n.time.pos == 3) {
       time.format <- "hms" # h:m:s
     }
-    guess.orders <- paste0(date.format, time.format) # merge date & time formats
+    guess.orders  <- paste0(date.format, time.format) # merge date-time formats
   } else {
-    guess.orders <- date.format
+    guess.orders  <- date.format
   }
   return(guess.orders)
 }
