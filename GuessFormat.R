@@ -116,6 +116,11 @@ GuessFormat <- function(x, sample.size = length(x)) {
       time.format <- "hm" # h:m
     } else if (n.time.pos == 3) {
       time.format <- "hms" # h:m:s
+    } else if (n.time.pos > 3) {
+      msg         <- paste(n.time.pos, "time elements were found.
+                           Elements beyond 3 may be discarded.")
+      warning(msg)
+      time.format <- "hms" # h:m:s + unknown others
     }
     guess.orders  <- paste0(date.format, time.format) # merge date-time formats
   } else {
