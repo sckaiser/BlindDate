@@ -8,6 +8,11 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
   #  if convert = T, a character vector with text months replaced by numbers.
   #  if convert = F, a numeric indicating the proportion of x with text months.
   
+  if (ignore.null) {
+    # Handle string synonyms for NA.
+    NA.syn   <- c("", "NULL", "Not Applicable", "NA")
+    x[x %in% NA.syn] <- NA
+  }
   m1         <- c("January", "February", "March", "April",
                   "May", "June", "July", "August",
                   "September", "October", "November", "December")
@@ -19,19 +24,13 @@ ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
                   "Decembre")  # extensibility example
   # Abbreviations must come after, i.e. be to the right of, the full months to
   # which they correspond. The matching logic requires this sequence.
-  
   date.df    <- data.frame(m1 = m1, m2 = m2, m3 = m3, stringsAsFactors = F)
-  if (ignore.null) {
-    # Handle string synonyms for NA.
-    NA.syn   <- c("", "NULL", "Not Applicable", "NA")
-    x[x %in% NA.syn] <- NA
-  }
   # Find the best matching column.
   matches    <- apply(date.df, 2, GreplAny, x, ignore.case = T)   # match months
   if (!is.matrix(matches)) {
-    matches    <- as.integer(matches)  # if only 1 row, convert it
+    matches  <- as.integer(matches)  # if only 1 row, convert it
   } else {
-    matches    <- apply(matches, 2, sum)  # sum by column
+    matches  <- apply(matches, 2, sum)  # sum by column
   }
   denom      <- length(x)  # exclude NAs and null strings
   if (ignore.null) {
