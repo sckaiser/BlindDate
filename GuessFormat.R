@@ -24,6 +24,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
   date.pos1    <- dates[[1]]
   date.pos2    <- ListExtract(dates, 2)
   date.pos3    <- ListExtract(dates, 3)
+  date.format  <- -Inf  # initialize with a failure value
   if (n.date.pos == 1) {
     # Assume we have a year.
     date.format <- YearLength(dates)
@@ -41,8 +42,6 @@ GuessFormat <- function(x, sample.size = length(x)) {
       date.format <- "my"
     } else if (max(date.pos1) > 12 & max(date.pos2) <= 12) {
       date.format <- "ym"
-    } else {
-      date.format <- -Inf # couldn't figure it out.
     }
   } else if (n.date.pos == 3) {
     pos1   <- pos2 <- pos3 <- -1 # intialize
