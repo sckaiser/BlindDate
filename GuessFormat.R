@@ -8,9 +8,9 @@ GuessFormat <- function(x, sample.size = length(x)) {
   #     or some subset; interpretable by {lubridate}'s parse_date_time().
   
   # ignore NAs & blanks which provide no clues and complicate downstream steps:
-  x <- x[!is.na(x) & x != "" & x != " " & x != "NA"]
+  x            <- x[!is.na(x)]
   if (length(x) > sample.size) {
-    x <- x[sample(length(x), sample.size)] # sample for speed
+    x          <- x[sample(length(x), sample.size)]  # sample for speed
   }
   n.elements   <- CountElements(x)
   date.len     <- 3  # assume up to the first 3 elements are dates
