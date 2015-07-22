@@ -1,17 +1,15 @@
-ConvertTextMonth <- function(x, convert = T, ignore.null = T) {
+ConvertTextMonth <- function(x, convert = T, ignore.null = F) {
   # Checks or converts a text month to a number within a date-time string.
   # Args:
   #  x, a known or possible date-time character vector.
   #  convert, a logical indicating whether to convert to the month number.
-  #  ignore.null, a logical indicating whether to ignore NA, "", and "NULL".
+  #  ignore.null, a logical indicating whether to ignore NA values.
   # Returns:
   #  if convert = T, a character vector with text months replaced by numbers.
   #  if convert = F, a numeric indicating the proportion of x with text months.
   
   if (ignore.null) {
-    # Handle string synonyms for NA.
-    NA.syn   <- c("", "NULL", "Not Applicable", "NA")
-    x[x %in% NA.syn] <- NA
+   x <- x[!is.na(x)]
   }
   m1         <- c("January", "February", "March", "April",
                   "May", "June", "July", "August",

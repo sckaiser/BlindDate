@@ -6,13 +6,16 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   #  tz,  timezone argument
   # Returns:
   #  x.date, a POSIX time vector
-  x           <- RmDupSpace(x) # trim leading, trailing, and/or duplicate spaces
+  
+  x           <- RmDupSpace(x) # trim leading, trailing, and duplicate spaces
+  NA.syn      <- c("", "NULL", "Not Applicable", "NA", "N/A")
+  x[x %in% NA.syn] <- NA  # convert NA synonyms
   sample.size <- 4000
   sample.size <- min(sample.size, length(x))
   x.sample    <- x[sample(length(x), sample.size)]  # sample for speed
   
   # Handle Month Text
-  text.month  <- ConvertTextMonth(x.sample, F)  # proportion of entries with a text month
+  text.month  <- ConvertTextMonth(x.sample, T)  # proportion of entries with a text month
   if (text.month > .95) {  # if more than 95% have text months...
     x         <- ConvertTextMonth(x)  # ...then convert to numeric months
   }
