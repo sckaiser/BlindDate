@@ -121,9 +121,8 @@ GuessFormat <- function(x, sample.size = length(x)) {
       warning(msg)
       time.format <- "hms" # h:m:s + unknown others
     }
-    guess.orders  <- paste0(date.format, time.format) # merge date-time formats
+    paste0(date.format, time.format)  # return merged date-time format
   } else {
-    guess.orders  <- date.format
+    date.format  # return date format
   }
-  return(guess.orders)
 }
