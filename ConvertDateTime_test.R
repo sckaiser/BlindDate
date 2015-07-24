@@ -18,7 +18,13 @@ for (i in 2:t.size) {
 # write.table(tm, "TestDates.csv", sep = ",", col.names = F, row.names = F)
 # open in Excel; change formats. Lots of formats.
 
-test.mat    <- read.csv("TestDates.csv", header = F, stringsAsFactors = F)
+test.mat    <- read.csv("TestDates.csv", header = F, colClasses = "character")
+test.mat    <- as.matrix(test.mat)
+NA.pct      <- 0.02  # replace this percent of cells with NA synonyms
+NA.cells    <- sample(length(test.mat), length(test.mat) * NA.pct)
+NA.syn      <- c(" ", "NULL", "Not Applicable", "NA", "N/A")
+test.mat[NA.cells] <- NA.syn
+
 convert.mat <- matrix(NA, nrow = nrow(test.mat), ncol = ncol(test.mat))
 convert.mat <- data.frame(convert.mat)
 colnames(convert.mat) <- colnames(test.mat)
