@@ -66,10 +66,6 @@ GuessFormat <- function(x, sample.size = length(x)) {
       pos3 <- "d"
     }
     
-    # One way to further improve would be to check for four digit dates,
-    # and if any are found, classify the year. Another improvement, we could
-    # look and see if only one position is missing, and assign it.
-    
     # If the following steps could classify exactly 1 position,
     # be more flexible for the last two:
     # If we can only ID the month...
