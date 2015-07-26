@@ -23,7 +23,7 @@ test.mat    <- as.matrix(test.mat)
 NA.pct      <- 0.02  # replace this percent of cells with NA synonyms
 NA.cells    <- sample(length(test.mat), length(test.mat) * NA.pct)
 NA.syn      <- c(" ", "NULL", "Not Applicable", "NA", "N/A")
-test.mat[NA.cells] <- NA.syn
+suppressWarnings(test.mat[NA.cells] <- NA.syn)  # muffle vector recycling warn
 
 convert.mat <- matrix(NA, nrow = nrow(test.mat), ncol = ncol(test.mat))
 convert.mat <- data.frame(convert.mat)
