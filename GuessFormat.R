@@ -55,7 +55,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
     } else if (!(min(date.pos1) >= 1 & max(date.pos1) <= 12) & !(min(date.pos2) >= 1 & max(date.pos2) <= 12) & (min(date.pos3) >= 1 & max(date.pos3) <= 12)) {
       pos3 <- "m"
     }
-    # If exactly one position is between 1 and 31, assign that as the month.
+    # If exactly one position is between 1 and 31, assign that as the day.
     # Note that this will be unable to classify cases where all date positions
     # are between 1 & 12, i.e., 1/11/10, 1/12/12, etc.)
     if ((min(date.pos1) >= 1 & max(date.pos1) > 12 & max(date.pos1) <= 31) & !(min(date.pos2) >= 1 & max(date.pos2) > 12 & max(date.pos2) <= 31) & !(min(date.pos3) >= 1 & max(date.pos3) > 12 & max(date.pos3) <= 31)) {
