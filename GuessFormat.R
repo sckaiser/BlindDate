@@ -58,7 +58,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
     # If exactly one position is between 1 and 31, assign that as the day.
     # Note that this will be unable to classify cases where all date positions
     # are between 1 & 12, i.e., 1/11/10, 1/12/12, etc.)
-    if (max(date.pos1) > 12 & max(date.pos1) <= 31) & !(max(date.pos2) > 12 & max(date.pos2) <= 31) & !(max(date.pos3) > 12 & max(date.pos3) <= 31)) {
+    if ((max(date.pos1) > 12 & max(date.pos1) <= 31) & !(max(date.pos2) > 12 & max(date.pos2) <= 31) & !(max(date.pos3) > 12 & max(date.pos3) <= 31)) {
       pos1 <- "d"
     } else if (!(max(date.pos1) > 12 & max(date.pos1) <= 31) & (max(date.pos2) > 12 & max(date.pos2) <= 31) & !(max(date.pos3) > 12 & max(date.pos3) <= 31)) {
       pos2 <- "d"
@@ -72,22 +72,22 @@ GuessFormat <- function(x, sample.size = length(x)) {
     # And of the remaining, 1 has 1:31 and the other does not...
     # ...then assign 1:31 the day.
 
-    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & (date.pos2 == 1:31 & date.pos3 != 1:31))  {
+    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & all(date.pos2 == 1:31 & date.pos3 != 1:31))  {
       pos2 <- "d"
     }
-    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & (date.pos2 != 1:31 & date.pos3 == 1:31))  {
+    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & all(date.pos2 != 1:31 & date.pos3 == 1:31))  {
       pos3 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & (date.pos1 == 1:31 & date.pos3 != 1:31)) {
+    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & all(date.pos1 == 1:31 & date.pos3 != 1:31)) {
       pos1 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & (date.pos1 != 1:31 & date.pos3 == 1:31)) {
+    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & all(date.pos1 != 1:31 & date.pos3 == 1:31)) {
       pos3 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & (date.pos1 == 1:31 & date.pos2 != 1:31))  {
+    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & all(date.pos1 == 1:31 & date.pos2 != 1:31))  {
       pos1 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & (date.pos1 != 1:31 & date.pos2 == 1:31))  {
+    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & all(date.pos1 != 1:31 & date.pos2 == 1:31))  {
       pos2 <- "d"
     }
     
