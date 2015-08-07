@@ -105,18 +105,18 @@ GuessFormat <- function(x, sample.size = length(x)) {
   if (has.times) {
     n.time.pos    <- n.elements - date.len  # first 3 are dates
     if (n.time.pos == 0) {
-      time.format <- "" # no time
+      time.format <- ""  # no time
     } else if (n.time.pos == 1) {
-      time.format <- "h" # hours
+      time.format <- "H"  # Hours
     } else if (n.time.pos == 2) {
-      time.format <- "hm" # h:m
+      time.format <- "HM"  # Hours:Minutes
     } else if (n.time.pos == 3) {
-      time.format <- "hms" # h:m:s
+      time.format <- "HMS"  # Hours:Minutes:Seconds
     } else if (n.time.pos > 3) {
       msg         <- paste(n.time.pos, "time elements were found.
                            Elements beyond 3 may be discarded.")
       warning(msg)
-      time.format <- "hms" # h:m:s + unknown others
+      time.format <- "HMS"  # h:m:s + unknown others
     }
     paste0(date.format, time.format)  # return merged date-time format
   } else {
