@@ -32,7 +32,7 @@ GuessFormat <- function(x, sample.size = length(x)) {
     # Assume we have a month and a year.
     pos1.digits <- nchar(date.pos1) # how many characters
     pos2.digits <- nchar(date.pos2)
-    pos1.digits <- max(pos1.digits) # take the max (months & days may only have 1 or 2)
+    pos1.digits <- max(pos1.digits) # max as months & days may only have 1 or 2
     pos2.digits <- max(pos2.digits) # ditto
     if (pos1.digits == 4 & pos2.digits < 4) {
       date.format <- "Ym"
@@ -48,21 +48,24 @@ GuessFormat <- function(x, sample.size = length(x)) {
     # We could be more conservative & assume that if we have fairly big data 
     # then we'll see all months & days; but for now, just look for ranges.
     # If exactly one position is between 1 and 12, assign that as the month.
-    if (max(date.pos1) <= 12 & max(date.pos2) > 12 & max(date.pos3) > 12) {
+    max.date.p1 <- max(date.pos1)
+    max.date.p2 <- max(date.pos2)
+    max.date.p3 <- max(date.pos3)
+    if (max.date.p1 <= 12 & max.date.p2 > 12 & max.date.p3 > 12) {
       pos1 <- "m"
-    } else if (max(date.pos1) > 12 & max(date.pos2) <= 12 & max(date.pos3) > 12) {
+    } else if (max.date.p1 > 12 & max.date.p2 <= 12 & max.date.p3 > 12) {
       pos2 <- "m"
-    } else if (max(date.pos1) > 12 & max(date.pos2) > 12 & max(date.pos3) <= 12) {
+    } else if (max.date.p1 > 12 & max.date.p2 > 12 & max.date.p3 <= 12) {
       pos3 <- "m"
     }
     # If exactly one position is between 1 and 31, assign that as the day.
     # Note that this will be unable to classify cases where all date positions
     # are between 1 & 12, i.e., 1/11/10, 1/12/12, etc.)
-    if ((max(date.pos1) > 12 & max(date.pos1) <= 31) & !(max(date.pos2) > 12 & max(date.pos2) <= 31) & !(max(date.pos3) > 12 & max(date.pos3) <= 31)) {
+    if ((max.date.p1 > 12 & max.date.p1 <= 31) & !(max.date.p2 > 12 & max.date.p2 <= 31) & !(max.date.p3 > 12 & max.date.p3 <= 31)) {
       pos1 <- "d"
-    } else if (!(max(date.pos1) > 12 & max(date.pos1) <= 31) & (max(date.pos2) > 12 & max(date.pos2) <= 31) & !(max(date.pos3) > 12 & max(date.pos3) <= 31)) {
+    } else if (!(max.date.p1 > 12 & max.date.p1 <= 31) & (max.date.p2 > 12 & max.date.p2 <= 31) & !(max.date.p3 > 12 & max.date.p3 <= 31)) {
       pos2 <- "d"
-    } else if (!(max(date.pos1) > 12 & max(date.pos1) <= 31) & !(max(date.pos2) > 12 & max(date.pos2) <= 31) & (max(date.pos3) > 12 & max(date.pos3) <= 31)) {
+    } else if (!(max.date.p1 > 12 & max.date.p1 <= 31) & !(max.date.p2 > 12 & max.date.p2 <= 31) & (max.date.p3 > 12 & max.date.p3 <= 31)) {
       pos3 <- "d"
     }
     
