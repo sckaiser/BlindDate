@@ -6,7 +6,7 @@ ConvertTextMonth <- function(x, convert = T, na.rm = F) {
   #  na.rm, a logical indicating whether to ignore NA values.
   # Returns:
   #  if convert = T, a character vector with text months replaced by numbers.
-  #  if convert = F, a numeric indicating the proportion of x with text months.
+  #  if convert = F, a length-one double: the proportion of x with text months.
   
   if (na.rm) {
    x <- x[!is.na(x)]
