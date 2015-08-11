@@ -10,11 +10,28 @@ CompleteSpan <- function(x, set, missing.val = NA) {
   #  missing.val, which tells the function how the missing value in x is 
   #               represented as missing.
   
-  # 1. convert the missing value to NA
-  # 2. check exactly one value is missing
-  # 3. setdiff x and set to find which value is to be completed
-  # 3a. some error handling if the intersection doesn't produce exactly one 
-  #     result; for example, if it is char0 or num0 or >1
-  # 4. assignment
-  # 5. conver the NAs back to the missing value
+  x.orig <- x
+  if(!is.na(missing.val)) {
+    x[x == missing.val] <- NA  # 1. convert the missing value to NA
+  }
+  # 2. check no more than one value is missing. 
+  if (length(x[is.na(x)]) != 1) {
+    return(x.orig)  # return the original
+  } else {
+    fill <- setdiff(set, x)  # 3. find which value is to be completed
+    if (length(fill) != 1) {
+      
+    }
+    # 3a. error handling if the setdiff isn't length-one 
+    
+    x[is.na(x)] <- fill  # 4. assignment
+    return(x)
+  } 
 }
+
+# testing
+CompleteSpan(c("D", "Y", NA), c("D", "M", "Y"))
+CompleteSpan(c(1:4, NA, 6:10), 1:10)
+CompleteSpan(c(7:10, NA, 1:5), 1:10)
+CompleteSpan(c("D", "Y", NA), c("D", "M", "Y"))
+
