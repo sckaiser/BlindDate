@@ -1,6 +1,6 @@
 # Test harness for ConvertDateTime.R script.
-library(lubridate)
-library(stringr)
+pkgs <- c("lubridate", "stringr")
+sapply(pkgs, library, character.only = T)
 setwd("C:/Users/scott_kaiser/Desktop/Analytics and Data Science/BlindDate")
 source("SourceDir.R")
 SourceDir(exclude = c("format utility.R", "ConvertDateTime_test.R"))
