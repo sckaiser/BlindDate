@@ -69,9 +69,8 @@ GuessFormat <- function(x, sample.size = length(x)) {
       pos3 <- "d"
     }
     
-    # If the following steps could classify exactly 1 position,
-    # be more flexible for the last two:
-    # If we can only ID the month...
+    # If the following steps could classify exactly 1 position, be more flexible
+    # for the last two: If we can only ID the month...
     # And of the remaining, 1 has 1:31 and the other does not...
     # ...then assign 1:31 the day.
 
@@ -94,15 +93,9 @@ GuessFormat <- function(x, sample.size = length(x)) {
       pos2 <- "d"
     }
     
-    # If month and day but not year are assigned, assign the year.
-    if ((pos1 == "m" | pos2 == "m" | pos3 == "m") & (pos1 == "d" | pos2 == "d" | pos3 == "d") & (pos1 == -1 | pos2 == -1 | pos3 == -1)) {
-      year.pos    <- which(c(pos1, pos2, pos3) == -1)
-      year.pos    <- paste0("pos", year.pos)
-      year.dates  <- get(paste0("date.", year.pos))
-      year.format <- YearLength(year.dates)
-      assign(year.pos, year.format)
-    }
-    date.format   <- paste0(pos1, pos2, pos3)   # final date assignment
+    # if exactly one date position is missing, fill it:
+    date.format   <- CompleteSpan(c(pos1, pos2, pos3), c("y", "m", "d"), missing.val = "-1")
+    date.format   <- paste0(date.format, collapse = "")  # combine the date positions
   }
   # Now get the times.
   if (has.times) {
