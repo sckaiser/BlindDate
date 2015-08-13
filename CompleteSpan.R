@@ -1,37 +1,41 @@
 CompleteSpan <- function(x, set, missing.val = NA) {
-  # If exactly one value in a vector is missing, returns it. Otherwise, returns
-  # the original vector unchanged. The point is to fill in the blanks when there
-  # is exactly one blank, and a known set of values. For example, when guessing
-  # the order of a date (YMD or MDY), if the location of M & D are known, Y can
-  # be infered to be in the unknown location.
+  # If exactly one value in a vector is missing compared to a known set, returns
+  # it. Otherwise, returns the original vector unchanged. The point is to fill
+  # in the blanks when there is exactly one blank, and a known set of values.
+  # For example, when guessing the order of a date (YMD or MDY), if the location
+  # of M & D are known, the remaining location can be infered to be Y.
   # Args:
   #  x, a vector of values with potentially one to be filled; order matters.
   #  set, the vector of values if x were complete. Order does not matter.
   #  missing.val, which tells the function how the missing value in x is 
   #               represented as missing.
+  # Solvable examples
+  #  CompleteSpan(c(1, 2, NA), c(1, 2, 3))
+  #  CompleteSpan(c(1, 2, NA, 1), c(1, 2, 3))
+  # Unsolvable examples
+  #  CompleteSpan(c(1, NA, 2), c(1, 2))
+  #  CompleteSpan(c(1, 2, NA), c(1, 2, 3, 4))
+  #  CompleteSpan(c(1, NA, NA, 3), c(1, 2, 3))
+  # Null examples
+  #  CompleteSpan(c(3, 2, 1), c(1, 2))
+  #  CompleteSpan(c(3, 2, 1), c(1, 2, 3))
+  #  CompleteSpan(c(3, 2, 1), c(1, 2, 3, 4))
   
-  x.orig <- x
-  if(!is.na(missing.val)) {
-    x[x == missing.val] <- NA  # 1. convert the missing value to NA
+  if (length(set) > length(x)) {
+    return(x)  # if set is bigger than x, the problem is underdetermined
   }
-  # 2. check no more than one value is missing. 
-  if (length(x[is.na(x)]) != 1) {
-    return(x.orig)  # return the original
+  x.orig <- x
+  if (!is.na(missing.val)) {
+    x[x == missing.val] <- NA  # convert the missing value to NA
+  }
+  if (length(x[is.na(x)]) != 1) {  # check exactly one value is missing
+    return(x.orig)  # if 0 or >1, return the original
   } else {
-    fill <- setdiff(set, x)  # 3. find which value is to be completed
-    if (length(fill) != 1) {
-      
-    }
-    # 3a. error handling if the setdiff isn't length-one 
-    
-    x[is.na(x)] <- fill  # 4. assignment
+    fill <- setdiff(set, x)  # find the value that completes x
+    if (is.empty(fill)) {
+      return(x.orig)  # handle case when x spans set *and* has a missing value
+    }  
+    x[is.na(x)] <- fill  # assign it
     return(x)
   } 
 }
-
-# testing
-CompleteSpan(c("D", "Y", NA), c("D", "M", "Y"))
-CompleteSpan(c(1:4, NA, 6:10), 1:10)
-CompleteSpan(c(7:10, NA, 1:5), 1:10)
-CompleteSpan(c("D", "Y", NA), c("D", "M", "Y"))
-
