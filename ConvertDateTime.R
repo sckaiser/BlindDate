@@ -15,7 +15,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   x.sample    <- x[sample(length(x), sample.size)]  # sample for speed
   
   # Handle Month Text. First, find what proportion of x has text months:
-  text.month  <- ConvertTextMonth(x.sample, T)
+  text.month  <- ConvertTextMonth(x.sample, F)
   if (text.month > .95) {  # if more than 95% have text months...
     x         <- ConvertTextMonth(x)  # ...then convert to numeric months
   }
