@@ -26,10 +26,10 @@ GuessFormat <- function(x, sample.size = length(x)) {
   date.pos3    <- ListExtract(dates, 3)
   date.format  <- -Inf  # initialize with a failure value
   if (n.date.pos == 1) {
-    # Assume we have a year.
+    # Assume a year.
     date.format <- YearLength(dates)
   } else if (n.date.pos == 2) {
-    # Assume we have a month and a year.
+    # Assume a month and a year.
     pos1.digits <- nchar(date.pos1) # how many characters
     pos2.digits <- nchar(date.pos2)
     pos1.digits <- max(pos1.digits) # max as months & days may only have 1 or 2
@@ -74,22 +74,22 @@ GuessFormat <- function(x, sample.size = length(x)) {
     # And of the remaining, 1 has 1:31 and the other does not...
     # ...then assign 1:31 the day.
 
-    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & all(date.pos2 == 1:31 & date.pos3 != 1:31))  {
+    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & identical(date.pos2, 1:31) & !identical(date.pos3, 1:31))  {
       pos2 <- "d"
     }
-    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & all(date.pos2 != 1:31 & date.pos3 == 1:31))  {
+    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & !identical(date.pos2, 1:31) & identical(date.pos3, 1:31))  {
       pos3 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & all(date.pos1 == 1:31 & date.pos3 != 1:31)) {
+    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & identical(date.pos1, 1:31) & !identical(date.pos3, 1:31)) {
       pos1 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & all(date.pos1 != 1:31 & date.pos3 == 1:31)) {
+    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & !identical(date.pos1, 1:31) & identical(date.pos3, 1:31)) {
       pos3 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & all(date.pos1 == 1:31 & date.pos2 != 1:31))  {
+    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & identical(date.pos1, 1:31) & !identical(date.pos2, 1:31))  {
       pos1 <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & all(date.pos1 != 1:31 & date.pos2 == 1:31))  {
+    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & !identical(date.pos1, 1:31) & identical(date.pos2, 1:31))  {
       pos2 <- "d"
     }
     
