@@ -10,7 +10,7 @@ SplitVectors <- function(x, n) {
   
   IdxHelper <- function(idx, x) x[idx]  # subsets a vector x using idx
   
-  if (!is.vector(x)) {
+  if (!is.atomic(x)) {
     stop("The object supplied wasn't a vector")
   }
   if (length(x) %% n != 0) {
