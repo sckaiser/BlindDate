@@ -8,15 +8,10 @@ SplitVectors <- function(x, n) {
   # Returns:
   #  a length-n list of vectors.
   
+  stopifnot(is.atomic(x), length(x) %% n == 0)
+  # the 2nd term checks that input length is a multiple of the number of splits
   IdxHelper <- function(idx, x) x[idx]  # subsets a vector x using idx
-  
-  if (!is.atomic(x)) {
-    stop("The object supplied wasn't a vector")
-  }
-  if (length(x) %% n != 0) {
-    warning("input length was not a multiple of the number of splits")
-  }
-  
+
   if (n > 1) {
     seq1        <- seq(1, length(x) + 1 - n, by = n)  # first splitting sequence 
     seq.list    <- list(seq1)
