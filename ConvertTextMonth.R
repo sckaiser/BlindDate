@@ -36,12 +36,10 @@ ConvertTextMonth <- function(x, convert = T, na.rm = F) {
   }
   matches    <- matches / denom   # calculate the proportion of matches
   best.col   <- which.max(matches)  # pick the highest; if tied, pick the first
-  proportion.matched <- as.vector(matches[best.col])
   if (convert) {
     patterns <- date.df[ , best.col]
-    x.new    <- MultiGsub(patterns, 1:12, x, ignore.case = T)
-    return(x.new)
+    MultiGsub(patterns, 1:12, x, ignore.case = T)  # return converted data
   } else {
-    return(proportion.matched)
+    as.vector(matches[best.col])  # return the proportion matched
   }
 }
