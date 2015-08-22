@@ -27,7 +27,7 @@ suppressWarnings(test.mat[NA.cells] <- NA.syn)  # muffle vector recycling warn
 
 convert.mat <- matrix(NA, nrow = nrow(test.mat), ncol = ncol(test.mat))
 convert.mat <- data.frame(convert.mat)
-colnames(convert.mat) <- colnames(test.mat)
+convert.mat <- setNames(convert.mat, colnames(test.mat))
 
 for (i in 1:ncol(test.mat)) {
   x <- test.mat[ , i]
