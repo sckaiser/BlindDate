@@ -38,7 +38,10 @@ ConvertTextMonth <- function(x, convert = T, na.rm = F) {
   best.col   <- which.max(matches)  # pick the highest; if tied, pick the first
   if (convert) {
     patterns <- date.df[ , best.col]
-    MultiGsub(patterns, 1:12, x, ignore.case = T)  # return converted data
+    out    <- MultiGsub(patterns, 1:12, x, ignore.case = T)  # convert data
+    mnth.pos <- TrueMode(out[[2]])  # most likely position of converted month
+    mnth.pos[mnth.pos != 1] <- NA  # only declare if near-certain
+    list(out[[1]], mnth.pos)  # return the converted data & month position
   } else {
     as.vector(matches[best.col])  # return the proportion matched
   }

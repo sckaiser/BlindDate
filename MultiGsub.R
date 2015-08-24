@@ -7,12 +7,19 @@ MultiGsub <- function(patterns, replacements, x, ...) {
   #  x, a character vector on which to find and replace.
   # Returns:
   #  x.new, the modified character vector.
-  # TODO: replace the for-loop with an apply.
+  #  loc, a vector of the first position in x that matched a pattern.
   
   stopifnot(length(patterns) == length(replacements))
-  x.new <- x
+  x.new   <- x
+  # initialize a matrix to store the position in x of each pattern match
+  loc.mat <- matrix(NA, nrow = length(x), ncol = length(patterns))
   for (i in 1:length(patterns)) {
+    temp  <- str_locate(x, patterns[i])  # find start & end of the pattern
+    loc.mat[ , i] <- temp[ , 1]  # save the start
     x.new <- gsub(patterns[i], replacements[i], x.new, ...)
   } # next pattern-replacement pair
-  return(x.new)
+  loc.mat[is.na(loc.mat)] <- Inf  # replace NA with Inf for min processing
+  loc     <- apply(loc.mat, 1, min, na.rm = T)  # find first location
+  loc[loc == Inf] <- NA  # replace with NA
+  list(x.new, loc)  # return
 }

@@ -17,7 +17,9 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   # Handle Month Text. First, find what proportion of x has text months:
   text.month  <- ConvertTextMonth(x.sample, F)
   if (text.month > .95) {  # if more than 95% have text months...
-    x         <- ConvertTextMonth(x)  # ...then convert to numeric months
+    out       <- ConvertTextMonth(x)  # ...then convert to numeric months
+    x         <- out[[1]]  # extract the converted data
+    mnth.pos  <- out[[2]]  # and which element had text months, if any. 
   }
   
   # Handle AM and PM text.
