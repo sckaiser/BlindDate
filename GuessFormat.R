@@ -1,7 +1,8 @@
-GuessFormat <- function(x, sample.size = length(x)) {
+GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   # Guesses the orders argument of a character string representing dates.
   # Args:
   #  x, a character vector of dates.
+  #  mnth.pos, an integer indicating which date-time element had a text month.
   #  sample.size, an optional integer to specify random sampling of x.
   # Returns:
   #  guess.orders, the sequence of year, month, day, hour, minute, and second 
@@ -92,6 +93,10 @@ GuessFormat <- function(x, sample.size = length(x)) {
     if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & !identical(date.pos1, 1:31) & identical(date.pos2, 1:31))  {
       pos2 <- "d"
     }
+    
+    # use if the caller gave the month position as 1 and we've not deduced it:
+    pos1          <- ifelse(mnth.pos == 1 & pos1 == -1
+                            & pos2 != "m" & pos3 != "m", "m", pos1)
     
     # if exactly one date position is missing, fill it:
     date.format   <- CompleteSpan(c(pos1, pos2, pos3), c("y", "m", "d"), missing.val = "-1")

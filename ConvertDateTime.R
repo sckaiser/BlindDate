@@ -16,6 +16,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   
   # Handle Month Text. First, find what proportion of x has text months:
   text.month  <- ConvertTextMonth(x.sample, F)
+  mnth.pos    <- NA  # initialize
   if (text.month > .95) {  # if more than 95% have text months...
     out       <- ConvertTextMonth(x)  # ...then convert to numeric months
     x         <- out[[1]]  # extract the converted data
@@ -29,7 +30,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   x.sample     <- x[sample(length(x), sample.size)]  # resample
   
   # Guess the format.
-  date.format  <- GuessFormat(x.sample, sample.size)  # Guess format
+  date.format  <- GuessFormat(x.sample, mnth.pos, sample.size)  # Guess format
   # print(date.format)  # debug
   x.date       <- parse_date_time(x, orders = date.format)  # lubridate convert
   if (any(PM.times)) {  # if we had any PM times, fix them.
