@@ -7,20 +7,20 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
   # Returns:
   #  x.date, a POSIX time vector
   
-  x           <- RmDupSpace(x) # trim leading, trailing, and duplicate spaces
-  NA.syn      <- c("", "NULL", "Not Applicable", "NA", "N/A")
+  x            <- RmDupSpace(x) # trim leading, trailing, and duplicate spaces
+  NA.syn       <- c("", "NULL", "Not Applicable", "NA", "N/A")
   x[x %in% NA.syn] <- NA  # convert NA synonyms
-  sample.size <- 4000
-  sample.size <- min(sample.size, length(x))
-  x.sample    <- x[sample(length(x), sample.size)]  # sample for speed
+  sample.size  <- 4000
+  sample.size  <- min(sample.size, length(x))
+  x.sample     <- x[sample(length(x), sample.size)]  # sample for speed
   
   # Handle Month Text. First, find what proportion of x has text months:
-  text.month  <- ConvertTextMonth(x.sample, F)
-  mnth.pos    <- NA  # initialize
+  text.month   <- ConvertTextMonth(x.sample, F)
+  mnth.pos     <- NA  # initialize
   if (text.month > .95) {  # if more than 95% have text months...
-    out       <- ConvertTextMonth(x)  # ...then convert to numeric months
-    x         <- out[[1]]  # extract the converted data
-    mnth.pos  <- out[[2]]  # and which element had text months, if any. 
+    out        <- ConvertTextMonth(x)  # ...then convert to numeric months
+    x          <- out[[1]]  # extract the converted data
+    mnth.pos   <- out[[2]]  # and which element had text months, if any. 
   }
   
   # Handle AM and PM text.
