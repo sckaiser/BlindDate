@@ -1,15 +1,19 @@
-ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC") {
+ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   # Converts a character vector of dates to a POSIXct vector.
   # Args:
   #  x, a character vector representing dates and possibly times
   #  t.format, whether to return "POSIXct", or "POSIXlt"
   #  tz,  timezone argument
+  #  trim.dec, whether to trim decimals from the seconds.
   # Returns:
   #  x.date, a POSIX time vector
   
   x            <- RmDupSpace(x) # trim leading, trailing, and duplicate spaces
   NA.syn       <- c("", "NULL", "Not Applicable", "NA", "N/A")
   x[x %in% NA.syn] <- NA  # convert NA synonyms
+  if (trim.dec) {
+    x          <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
+  }
   sample.size  <- 4000
   sample.size  <- min(sample.size, length(x))
   x.sample     <- x[sample(length(x), sample.size)]  # sample for speed
