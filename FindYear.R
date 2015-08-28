@@ -17,8 +17,3 @@ FindYear <- function(x) {
     NA  # else return NA
   }
 }
-
-FindYear(list(c("1990", "1991"), c("20", "31"), c("02", "10")))
-FindYear(list(c("1990", "1991"), c("2001", "2031"), c("02", "10")))
-FindYear(list(c("20", "31"), c("1990", "1991")))
-FindYear(list(c("20", "31")))
