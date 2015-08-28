@@ -26,26 +26,35 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   date.pos2    <- ListExtract(dates, 2)
   date.pos3    <- ListExtract(dates, 3)
   date.format  <- -Inf  # initialize with a failure value
+  pos1         <- pos2 <- pos3 <- -1 # intialize
+  year.pos     <- FindYear(dates[1:n.date.pos])  # check for 4 digit dates
+  if (year.pos == 1) {
+    pos1 <- "Y"
+  } else if (year.pos == 2) {
+    pos2 <- "Y"
+  } else if (year.pos == 3) {
+    pos3 <- "Y"
+  }
   if (n.date.pos == 1) {
     # Assume a year.
     date.format <- YearLength(dates)
   } else if (n.date.pos == 2) {
     # Assume a month and a year.
-    pos1.digits <- nchar(date.pos1) # how many characters
-    pos2.digits <- nchar(date.pos2)
-    pos1.digits <- max(pos1.digits) # max as months & days may only have 1 or 2
-    pos2.digits <- max(pos2.digits) # ditto
-    if (pos1.digits == 4 & pos2.digits < 4) {
-      date.format <- "Ym"
-    } else if (pos1.digits < 4 & pos2.digits == 4) {
-      date.format <- "mY"
-    } else if (max(date.pos1) <= 12 & max(date.pos2) > 12) {
-      date.format <- "my"
+    # Check if either has values under 12:
+    if (max(date.pos1) <= 12 & max(date.pos2) > 12) {
+      pos1 <- "m"
     } else if (max(date.pos1) > 12 & max(date.pos2) <= 12) {
-      date.format <- "ym"
+      pos2 <- "m"
     }
+    # If we found only one position, impute the other:
+    if (is.na(year.pos) | year.pos > 3) {
+      span.vals <- c("y", "m")
+    } else {
+      span.vals <- c("Y", "m")
+    }
+    date.format <- CompleteSpan(c(pos1, pos2), span.vals, missing.val = "-1")
+    date.format <- paste0(date.format, collapse = "")  # combine the date positions
   } else if (n.date.pos == 3) {
-    pos1   <- pos2 <- pos3 <- -1 # intialize
     # We could be more conservative & assume that if we have fairly big data 
     # then we'll see all months & days; but for now, just look for ranges.
     # If exactly one position is between 1 and 12, assign that as the month.
