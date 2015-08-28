@@ -5,7 +5,7 @@ FindYear <- function(x) {
   #     a day, month, or year.
   # Returns:
   #  an integer indicating which date element is the year. If it cannot
-  #  determine the year, it returns NA.
+  #  determine the year, it returns -1.
   
   ModeNchar <- function(x) TrueMode(nchar(x))  # mode of number of characters
   
@@ -14,6 +14,6 @@ FindYear <- function(x) {
   if (length(year) == 1) {
     year  # return it
   } else {
-    NA  # else return NA
+    -1L  # else not found
   }
 }
