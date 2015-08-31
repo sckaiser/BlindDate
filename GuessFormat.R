@@ -5,8 +5,8 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   #  mnth.pos, an integer indicating which date-time element had a text month.
   #  sample.size, an optional integer to specify random sampling of x.
   # Returns:
-  #  guess.orders, the sequence of year, month, day, hour, minute, and second 
-  #     or some subset; interpretable by {lubridate}'s parse_date_time().
+  #  the sequence of year, month, day, hour, minute, and second or some subset;
+  #      interpretable by {lubridate}'s parse_date_time().
   
   # ignore NAs & blanks which provide no clues and complicate downstream steps:
   x            <- x[!is.na(x)]
