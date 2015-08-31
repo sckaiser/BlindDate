@@ -25,26 +25,21 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   date.pos1    <- dates[[1]]
   date.pos2    <- ListExtract(dates, 2)
   date.pos3    <- ListExtract(dates, 3)
-  date.format  <- -Inf  # initialize with a failure value
-  pos1         <- pos2 <- pos3 <- -1 # intialize
+  dt.format    <- rep(-1, n.date.pos) # initialize with a failure value
   year.pos     <- FindYear(dates[1:n.date.pos])  # check for 4 digit dates
-  if (year.pos == 1) {
-    pos1 <- "Y"
-  } else if (year.pos == 2) {
-    pos2 <- "Y"
-  } else if (year.pos == 3) {
-    pos3 <- "Y"
+  if (year.pos >= 1 & year.pos <= n.date.pos) {
+    dt.format[year.pos] <- "Y"
   }
   if (n.date.pos == 1) {
     # Assume a year.
-    date.format <- YearLength(dates)
+    dt.format <- YearLength(dates)
   } else if (n.date.pos == 2) {
     # Assume a month and a year.
     # Check if either has values under 12:
     if (max(date.pos1) <= 12 & max(date.pos2) > 12) {
-      pos1 <- "m"
+      dt.format[1] <- "m"
     } else if (max(date.pos1) > 12 & max(date.pos2) <= 12) {
-      pos2 <- "m"
+      dt.format[2] <- "m"
     }
     # If we found only one position, impute the other:
     if (is.na(year.pos) | year.pos > 3) {
@@ -52,8 +47,7 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     } else {
       span.vals <- c("Y", "m")
     }
-    date.format <- CompleteSpan(c(pos1, pos2), span.vals, missing.val = "-1")
-    date.format <- paste0(date.format, collapse = "")  # combine the date positions
+    dt.format <- CompleteSpan(dt.format, span.vals, missing.val = "-1")
   } else if (n.date.pos == 3) {
     # We could be more conservative & assume that if we have fairly big data 
     # then we'll see all months & days; but for now, just look for ranges.
@@ -62,21 +56,21 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     max.date.p2 <- max(date.pos2)
     max.date.p3 <- max(date.pos3)
     if (max.date.p1 <= 12 & max.date.p2 > 12 & max.date.p3 > 12) {
-      pos1 <- "m"
+      dt.format[1] <- "m"
     } else if (max.date.p1 > 12 & max.date.p2 <= 12 & max.date.p3 > 12) {
-      pos2 <- "m"
+      dt.format[2] <- "m"
     } else if (max.date.p1 > 12 & max.date.p2 > 12 & max.date.p3 <= 12) {
-      pos3 <- "m"
+      dt.format[3] <- "m"
     }
     # If exactly one position is between 1 and 31, assign that as the day.
     # Note that this will be unable to classify cases where all date positions
     # are between 1 & 12, i.e., 1/11/10, 1/12/12, etc.)
     if ((max.date.p1 > 12 & max.date.p1 <= 31) & !(max.date.p2 > 12 & max.date.p2 <= 31) & !(max.date.p3 > 12 & max.date.p3 <= 31)) {
-      pos1 <- "d"
+      dt.format[1] <- "d"
     } else if (!(max.date.p1 > 12 & max.date.p1 <= 31) & (max.date.p2 > 12 & max.date.p2 <= 31) & !(max.date.p3 > 12 & max.date.p3 <= 31)) {
-      pos2 <- "d"
+      dt.format[2] <- "d"
     } else if (!(max.date.p1 > 12 & max.date.p1 <= 31) & !(max.date.p2 > 12 & max.date.p2 <= 31) & (max.date.p3 > 12 & max.date.p3 <= 31)) {
-      pos3 <- "d"
+      dt.format[3] <- "d"
     }
     
     # If the following steps could classify exactly 1 position, be more flexible
@@ -84,45 +78,45 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     # And of the remaining, 1 has 1:31 and the other does not...
     # ...then assign 1:31 the day.
 
-    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & identical(date.pos2, 1:31) & !identical(date.pos3, 1:31))  {
-      pos2 <- "d"
+    if ((dt.format[1] == "m" & dt.format[2] == "-1" & dt.format[3] == "-1") & identical(date.pos2, 1:31) & !identical(date.pos3, 1:31))  {
+      dt.format[2] <- "d"
     }
-    if ((pos1 == "m" & pos2 == "-1" & pos3 == "-1") & !identical(date.pos2, 1:31) & identical(date.pos3, 1:31))  {
-      pos3 <- "d"
+    if ((dt.format[1] == "m" & dt.format[2] == "-1" & dt.format[3] == "-1") & !identical(date.pos2, 1:31) & identical(date.pos3, 1:31))  {
+      dt.format[3] <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & identical(date.pos1, 1:31) & !identical(date.pos3, 1:31)) {
-      pos1 <- "d"
+    if ((dt.format[1] == "-1" & dt.format[2] == "m" & dt.format[3] == "-1") & identical(date.pos1, 1:31) & !identical(date.pos3, 1:31)) {
+      dt.format[1] <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "m" & pos3 == "-1") & !identical(date.pos1, 1:31) & identical(date.pos3, 1:31)) {
-      pos3 <- "d"
+    if ((dt.format[1] == "-1" & dt.format[2] == "m" & dt.format[3] == "-1") & !identical(date.pos1, 1:31) & identical(date.pos3, 1:31)) {
+      dt.format[3] <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & identical(date.pos1, 1:31) & !identical(date.pos2, 1:31))  {
-      pos1 <- "d"
+    if ((dt.format[1] == "-1" & dt.format[2] == "-1" & dt.format[3] == "m") & identical(date.pos1, 1:31) & !identical(date.pos2, 1:31))  {
+      dt.format[1] <- "d"
     }
-    if ((pos1 == "-1" & pos2 == "-1" & pos3 == "m") & !identical(date.pos1, 1:31) & identical(date.pos2, 1:31))  {
-      pos2 <- "d"
+    if ((dt.format[1] == "-1" & dt.format[2] == "-1" & dt.format[3] == "m") & !identical(date.pos1, 1:31) & identical(date.pos2, 1:31))  {
+      dt.format[2] <- "d"
     }
     
     # use if the caller gave the month position as 1 and we've not deduced it:
-    pos1          <- ifelse(mnth.pos == 1 & pos1 == -1
-                            & pos2 != "m" & pos3 != "m", "m", pos1)
+    dt.format[1]  <- ifelse(mnth.pos == 1 & dt.format[1] == -1
+                      & dt.format[2] != "m" & dt.format[3] != "m", "m", dt.format[1])
     
     # if exactly one date position is missing, fill it:
-    date.format   <- CompleteSpan(c(pos1, pos2, pos3), c("y", "m", "d"), missing.val = "-1")
-    date.format   <- paste0(date.format, collapse = "")  # combine the date positions
+    dt.format     <- CompleteSpan(dt.format, c("y", "m", "d"), missing.val = "-1")
   }
+  dt.format       <- paste0(dt.format, collapse = "")  # combine the date positions
   # Now get the times.
   if (has.times) {
     n.time.pos    <- n.elements - date.len  # first 3 are dates
     # assume Hours:Minutes:Seconds
-    time.format   <- substring("HMS", 0, min(3, n.time.pos))  
+    time.format   <- substring("HMS", 0, min(3, n.time.pos))
     if (n.time.pos > 3) {
       msg         <- paste(n.time.pos, "time elements were found.
                            Elements beyond 3 may be discarded.")
       warning(msg)
     }
-    paste0(date.format, time.format)  # return merged date-time format
+    paste0(dt.format, time.format)  # return merged date-time format
   } else {
-    date.format  # return date format
+    dt.format  # return date format
   }
 }
