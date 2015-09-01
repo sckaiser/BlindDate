@@ -27,8 +27,9 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   date.pos3    <- ListExtract(dates, 3)
   dt.format    <- rep(-1, n.date.pos) # initialize with a failure value
   year.pos     <- FindYear(dates[1:n.date.pos])  # check for 4 digit dates
+  full.span    <- c("y", "m", "d")[1:n.date.pos]  # the complete span
   if (year.pos >= 1 & year.pos <= n.date.pos) {
-    dt.format[year.pos] <- "Y"
+    dt.format[year.pos] <- full.span[1] <- "Y"
   }
   if (n.date.pos == 1) {
     # Assume a year.
@@ -41,13 +42,6 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     } else if (max(date.pos1) > 12 & max(date.pos2) <= 12) {
       dt.format[2] <- "m"
     }
-    # If we found only one position, impute the other:
-    if (is.na(year.pos) | year.pos > 3) {
-      span.vals <- c("y", "m")
-    } else {
-      span.vals <- c("Y", "m")
-    }
-    dt.format <- CompleteSpan(dt.format, span.vals, missing.val = "-1")
   } else if (n.date.pos == 3) {
     # We could be more conservative & assume that if we have fairly big data 
     # then we'll see all months & days; but for now, just look for ranges.
@@ -100,10 +94,8 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     # use if the caller gave the month position as 1 and we've not deduced it:
     dt.format[1]  <- ifelse(mnth.pos == 1 & dt.format[1] == -1
                       & dt.format[2] != "m" & dt.format[3] != "m", "m", dt.format[1])
-    
-    # if exactly one date position is missing, fill it:
-    dt.format     <- CompleteSpan(dt.format, c("y", "m", "d"), missing.val = "-1")
   }
+  dt.format       <- CompleteSpan(dt.format, full.span, missing.val = "-1")  # impute
   dt.format       <- paste0(dt.format, collapse = "")  # combine the date positions
   # Now get the times.
   if (has.times) {
