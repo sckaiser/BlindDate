@@ -26,8 +26,11 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   date.pos2    <- ListExtract(dates, 2)
   date.pos3    <- ListExtract(dates, 3)
   dt.format    <- rep(-1, n.date.pos) # initialize with a failure value
-  year.pos     <- FindYear(dates[1:n.date.pos])  # check for 4 digit dates
   full.span    <- c("y", "m", "d")[1:n.date.pos]  # the complete span
+  max.dt.p1    <- max(date.pos1)
+  max.dt.p2    <- if (is.null(date.pos2)) 1L[0] else max(date.pos2)
+  max.dt.p3    <- if (is.null(date.pos3)) 1L[0] else max(date.pos3)
+  year.pos     <- FindYear(dates[1:n.date.pos])  # check for 4 digit dates
   if (year.pos >= 1 & year.pos <= n.date.pos) {
     dt.format[year.pos] <- full.span[1] <- "Y"
   }
@@ -37,33 +40,30 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   } else if (n.date.pos == 2) {
     # Assume a month and a year.
     # Check if either has values under 12:
-    if (max(date.pos1) <= 12 & max(date.pos2) > 12) {
+    if (max.dt.p1 <= 12 & max.dt.p2 > 12) {
       dt.format[1] <- "m"
-    } else if (max(date.pos1) > 12 & max(date.pos2) <= 12) {
+    } else if (max.dt.p1 > 12 & max.dt.p2 <= 12) {
       dt.format[2] <- "m"
     }
   } else if (n.date.pos == 3) {
     # We could be more conservative & assume that if we have fairly big data 
     # then we'll see all months & days; but for now, just look for ranges.
     # If exactly one position is between 1 and 12, assign that as the month.
-    max.date.p1 <- max(date.pos1)
-    max.date.p2 <- max(date.pos2)
-    max.date.p3 <- max(date.pos3)
-    if (max.date.p1 <= 12 & max.date.p2 > 12 & max.date.p3 > 12) {
+    if (max.dt.p1 <= 12 & max.dt.p2 > 12 & max.dt.p3 > 12) {
       dt.format[1] <- "m"
-    } else if (max.date.p1 > 12 & max.date.p2 <= 12 & max.date.p3 > 12) {
+    } else if (max.dt.p1 > 12 & max.dt.p2 <= 12 & max.dt.p3 > 12) {
       dt.format[2] <- "m"
-    } else if (max.date.p1 > 12 & max.date.p2 > 12 & max.date.p3 <= 12) {
+    } else if (max.dt.p1 > 12 & max.dt.p2 > 12 & max.dt.p3 <= 12) {
       dt.format[3] <- "m"
     }
     # If exactly one position is between 1 and 31, assign that as the day.
     # Note that this will be unable to classify cases where all date positions
     # are between 1 & 12, i.e., 1/11/10, 1/12/12, etc.)
-    if ((max.date.p1 > 12 & max.date.p1 <= 31) & !(max.date.p2 > 12 & max.date.p2 <= 31) & !(max.date.p3 > 12 & max.date.p3 <= 31)) {
+    if ((max.dt.p1 > 12 & max.dt.p1 <= 31) & !(max.dt.p2 > 12 & max.dt.p2 <= 31) & !(max.dt.p3 > 12 & max.dt.p3 <= 31)) {
       dt.format[1] <- "d"
-    } else if (!(max.date.p1 > 12 & max.date.p1 <= 31) & (max.date.p2 > 12 & max.date.p2 <= 31) & !(max.date.p3 > 12 & max.date.p3 <= 31)) {
+    } else if (!(max.dt.p1 > 12 & max.dt.p1 <= 31) & (max.dt.p2 > 12 & max.dt.p2 <= 31) & !(max.dt.p3 > 12 & max.dt.p3 <= 31)) {
       dt.format[2] <- "d"
-    } else if (!(max.date.p1 > 12 & max.date.p1 <= 31) & !(max.date.p2 > 12 & max.date.p2 <= 31) & (max.date.p3 > 12 & max.date.p3 <= 31)) {
+    } else if (!(max.dt.p1 > 12 & max.dt.p1 <= 31) & !(max.dt.p2 > 12 & max.dt.p2 <= 31) & (max.dt.p3 > 12 & max.dt.p3 <= 31)) {
       dt.format[3] <- "d"
     }
     
