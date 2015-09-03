@@ -15,9 +15,9 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   }
   n.elements   <- CountElements(x)
   date.len     <- 3  # assume up to the first 3 elements are dates
-  n.date.pos   <- min(n.elements, date.len)  # assume up to first 3 are dates
+  n.date.pos   <- min(n.elements, date.len)
   has.times    <- ifelse(n.elements > date.len, T, F)  # more elements = times
-  x            <- TokenizeDt(x)  # create a list of vectors of date elements
+  x            <- TokenizeDt(x)  # create a list of date element vectors
   x            <- unlist(x)
   dates        <- SplitVectors(x, n.elements)
   dates        <- lapply(dates, as.integer)  # TokenizeDt() ensures integers
@@ -32,11 +32,11 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   max.dt.p3    <- if (is.null(date.pos3)) 1L[0] else max(date.pos3)
   year.pos     <- FindYear(dates[1:n.date.pos])  # check for 4 digit dates
   if (year.pos >= 1 & year.pos <= n.date.pos) {
-    dt.format[year.pos] <- full.span[1] <- "Y"
+    dt.format[year.pos] <- full.span[1] <- "Y"  # assign; & adjust span
   }
   if (n.date.pos == 1) {
     # Assume a year.
-    dt.format <- YearLength(dates)
+    dt.format  <- YearLength(dates)
   } else if (n.date.pos == 2) {
     # Assume a month and a year.
     # Check if either has values under 12:
@@ -94,9 +94,10 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     # use if the caller gave the month position as 1 and we've not deduced it:
     dt.format[1]  <- ifelse(mnth.pos == 1 & dt.format[1] == -1
                       & dt.format[2] != "m" & dt.format[3] != "m", "m", dt.format[1])
+    
   }
-  dt.format       <- CompleteSpan(dt.format, full.span, missing.val = "-1")  # impute
-  dt.format       <- paste0(dt.format, collapse = "")  # combine the date positions
+  dt.format       <- CompleteSpan(dt.format, full.span, "-1")  # impute
+  dt.format       <- paste0(dt.format, collapse = "")  # combine date positions
   # Now get the times.
   if (has.times) {
     n.time.pos    <- n.elements - date.len  # first 3 are dates
