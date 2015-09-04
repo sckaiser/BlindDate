@@ -91,10 +91,10 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
       dt.format[2] <- "d"
     }
     
-    # use if the caller gave the month position as 1 and we've not deduced it:
-    dt.format[1]  <- ifelse(mnth.pos == 1 & dt.format[1] == -1
-                      & dt.format[2] != "m" & dt.format[3] != "m", "m", dt.format[1])
-    
+    # if caller gave the month position as 1 and we've not deduced it:
+    if (mnth.pos == 1 & dt.format[1] == -1 & !"m" %in% dt.format) {
+      dt.format[1] <- "m"
+    }
   }
   dt.format       <- CompleteSpan(dt.format, full.span, "-1")  # impute
   dt.format       <- paste0(dt.format, collapse = "")  # combine date positions
