@@ -11,7 +11,7 @@ start.date <- as.POSIXct("01-01-2015 00:00:00", format = "%m-%d-%Y %H:%M:%S")
 tm         <- rep(start.date, t.size)
 increment  <- 61 * 60  # increment just more than an hour to generate more times
 for (i in 2:t.size) {
-  tm[i] <- tm[i - 1] + increment
+  tm[i]    <- tm[i - 1] + increment
 }
 
 # One-time initialization:
