@@ -27,6 +27,3 @@ is.datechar <- function(x) {
     F  # if it's not a character vector, it's not date-as-character.
   }
 }
-
-is.datechar("January 1, 2015")
-is.datechar("When in the course of human events")
