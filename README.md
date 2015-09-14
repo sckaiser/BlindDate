@@ -24,14 +24,15 @@ times are almost always in the order HMS; and so on.
 
 ## Getting Started
 1. [Download](https://github.com/sckaiser/BlindDate/archive/master.zip) the files.
-2. Extract them into their own directory.
+2. Extract the zip file into its own directory.
 3. Run the following code in R:
 
 <code>pkgs <- c("lubridate", "stringr")</code>
 <code>sapply(pkgs, library, character.only = T)</code>
 <code>setwd("ReplaceWithYourDownloadDirectory/BlindDate")</code>
 <code>source("SourceDir.R")</code>
-<code>SourceDir(exclude = c("format utility.R", "ConvertDateTime_test.R"))</code>
+<code>SourceDir(exclude = c("format utility.R", "ConvertDateTime_test.R"))</code> 
+
 4.  Try the following examples:
 
 <code>ConvertDateTime("January 1, 2001")</code>
