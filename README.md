@@ -26,14 +26,14 @@ times are almost always in the order HMS; and so on.
 1. [Download](https://github.com/sckaiser/BlindDate/archive/master.zip) the files.
 2. Extract them into their own directory.
 3. Run the following code in R:
-    pkgs <- c("lubridate", "stringr")
-    sapply(pkgs, library, character.only = T)
-    setwd("ReplaceWithYourDownloadDirectory/BlindDate")
-    source("SourceDir.R")
-    SourceDir(exclude = c("format utility.R", "ConvertDateTime_test.R"))
+<code>pkgs <- c("lubridate", "stringr")</code>
+<code>sapply(pkgs, library, character.only = T)</code>
+<code>setwd("ReplaceWithYourDownloadDirectory/BlindDate")</code>
+<code>source("SourceDir.R")</code>
+<code>SourceDir(exclude = c("format utility.R", "ConvertDateTime_test.R"))</code>
 4.  Try the following examples:
-    ConvertDateTime("January 1, 2001")
-    ConvertDateTime(c("12/05/98", "1/31/01", "3/1/14"))
+<code>ConvertDateTime("January 1, 2001")</code>
+<code>ConvertDateTime(c("12/05/98", "1/31/01", "3/1/14"))</code>
 For developers, a [digraph of functional relationships](https://github.com/sckaiser/BlindDate/blob/master/Digraph_functions.png) is provided to help visualize the code; I update it on an ad hoc basis.
 
 ## Dependencies
