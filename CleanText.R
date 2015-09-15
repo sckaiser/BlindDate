@@ -3,7 +3,6 @@ CleanText <- function(x) {
   # Args:
   #  x, a character string
   
-  stopifnot(is.character(x))
   x                <- RmDupSpace(x) # trim leading, trailing & duplicate spaces
   NA.syn           <- c("", "NULL", "Not Applicable", "NA", "N/A")
   x[x %in% NA.syn] <- NA  # convert NA synonyms
