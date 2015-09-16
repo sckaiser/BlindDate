@@ -6,10 +6,7 @@ is.datechar <- function(x) {
   #  a length-one logical indicating whether the vector is "date-as-character".
 
   if (is.character(x)) {
-    x            <- RmDupSpace(x) # trim leading, trailing, and duplicate spaces
-    NA.syn       <- c("", "NULL", "Not Applicable", "NA", "N/A")
-    x[x %in% NA.syn] <- NA  # convert NA synonyms
-    x            <- x[!is.na(x)]  # drop NA entries
+    x            <- CleanText(x)  # handle extra spaces and NA-synonyms
     x            <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
     sample.size  <- 4000
     sample.size  <- min(sample.size, length(x))

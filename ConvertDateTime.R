@@ -8,9 +8,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   # Returns:
   #  x.date, a POSIX time vector
   
-  x            <- RmDupSpace(x) # trim leading, trailing, and duplicate spaces
-  NA.syn       <- c("", "NULL", "Not Applicable", "NA", "N/A")
-  x[x %in% NA.syn] <- NA  # convert NA synonyms
+  x            <- CleanText(x)  # handle extra spaces and NA-synonyms
   if (trim.dec) {
     x          <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
   }
