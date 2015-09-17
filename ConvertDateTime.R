@@ -8,35 +8,35 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   # Returns:
   #  x.date, a POSIX time vector
   
-  x            <- CleanText(x)  # handle extra spaces and NA-synonyms
+  x          <- CleanText(x)  # handle extra spaces and NA-synonyms
   if (trim.dec) {
-    x          <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
+    x        <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
   }
-  sample.size  <- 4000
-  sample.size  <- min(sample.size, length(x))
-  x.sample     <- x[sample(length(x), sample.size)]  # sample for speed
+  sample.sz  <- 4000
+  sample.sz  <- min(sample.sz, length(x))
+  x.sample   <- x[sample(length(x), sample.sz)]  # sample for speed
   
   # Handle Month Text. First, find what proportion of x has text months:
-  text.month   <- ConvertTextMonth(x.sample, F)
-  mnth.pos     <- NA  # initialize
+  text.month <- ConvertTextMonth(x.sample, F)
+  mnth.pos   <- NA  # initialize
   if (text.month > .95) {  # if more than 95% have text months...
-    out        <- ConvertTextMonth(x)  # ...then convert to numeric months
-    x          <- out[[1]]  # extract the converted data
-    mnth.pos   <- out[[2]]  # and which element had text months, if any. 
+    out      <- ConvertTextMonth(x)  # ...then convert to numeric months
+    x        <- out[[1]]  # extract the converted data
+    mnth.pos <- out[[2]]  # and which element had text months, if any. 
   }
   
   # Handle AM and PM text.
-  PM.times     <- grepl("PM", x)  # store vector of which times are PM
-  x            <- gsub("PM", "", x)  # Remove PM
-  x            <- gsub("AM", "", x)  # Remove AM
-  x.sample     <- x[sample(length(x), sample.size)]  # resample
+  PM.times   <- grepl("PM", x)  # store vector of which times are PM
+  x          <- gsub("PM", "", x)  # Remove PM
+  x          <- gsub("AM", "", x)  # Remove AM
+  x.sample   <- x[sample(length(x), sample.sz)]  # resample
   
   # Guess the format.
-  date.format  <- GuessFormat(x.sample, mnth.pos, sample.size)  # Guess format
+  dt.format  <- GuessFormat(x.sample, mnth.pos, sample.sz)  # Guess format
   # print(date.format)  # debug
-  x.date       <- parse_date_time(x, orders = date.format)  # lubridate convert
+  x.date     <- parse_date_time(x, orders = dt.format)  # lubridate convert
   if (any(PM.times)) {  # if we had any PM times, fix them.
-    x.hour     <- hour(x.date)  # get hours
+    x.hour   <- hour(x.date)  # get hours
     
     # Add 12 hours to all PM times on or after 1PM:
     x.date[PM.times & x.hour != 12] <-
@@ -47,10 +47,10 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
               x.date[!PM.times & x.hour == 12 & !is.na(x.date)] - (60 * 60 * 12)
   }
   if (tz != "UTC") {
-    x.date     <- force_tz(x.date, tzone = tz)  # change timezone if requested
+    x.date   <- force_tz(x.date, tzone = tz)  # change timezone if requested
   }
   if (t.format == "POSIXlt") {
-    x.date     <- as.POSIXlt(x.date)  # convert if requested
+    x.date   <- as.POSIXlt(x.date)  # convert if requested
   }
   return(x.date)
 }
