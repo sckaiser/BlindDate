@@ -43,6 +43,8 @@ Try the following examples:
 
 <code>ConvertDateTime(c("12/05/98", "1/31/01", "3/1/14"))</code>
 
+<code>is.datechar("4-JUL-1776")</code>
+
 For developers, a [digraph of functional relationships](https://github.com/sckaiser/BlindDate/blob/master/Digraph_functions.png) is provided to help visualize the code; I update it on an ad hoc basis.
 
 ## Dependencies
