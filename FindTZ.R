@@ -18,16 +18,25 @@ FindTZ <- function(x) {
   
   H            <- "[0-2]?[0-9]"  # 24h, don't assume the first digit is zero
   M <- S       <- "[0-6]?[0-9]?"
+  decimal      <- "[0-9]*"  # allow for decimal seconds/time
   sep          <- "[:punct:]?"  # allow any punctuation to separate time values
-  AM.PM        <- # to be added
-  TZ           <- # to be added
+  AM.PM        <- "[AM]?[PM]?"
+  TZ           <- "[alnum]*[/]?[-]?[+]?[alnum]*"
+  # the TZ still needs to handle underscores... up to two of them.
+  
+
     # allow for an optional trailing decimal
-  pattern      <- paste0(H, sep, M, sep, S, sep, "[0-9]*",
-                        "[:space:]*", AM.PM, "[:space:]*", TZ)
+  pattern      <- paste0(H, sep, M, sep, S, sep, decimal, "[:space:]*", AM.PM,
+                         "[:space:]*", TZ, "[:space:]*$")
   # note that [:punct:] may need to be replaced with [[:punct]] or similar
   
   # need to make allowance for AM/PM.
   
   # If it is present, strip the timezone from the input string & return x with
   # the timezone removed, and a vector of the timezones.
+  grepl(pattern, x)  # return value for testing
 }
+
+test.tz <- paste("12:21:51 AM", OlsonNames())
+test.tz[FindTZ(test.tz)]  # what are we matching?
+test.tz[!FindTZ(test.tz)]  # what are we missing?
