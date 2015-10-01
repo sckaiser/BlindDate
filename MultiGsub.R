@@ -9,6 +9,11 @@ MultiGsub <- function(patterns, replacements, x, ...) {
   #  x.new, the modified character vector.
   #  loc, a vector of the first position in x that matched a pattern.
   
+  if(length(replacements) < length(patterns) &&
+       length(patterns) %% length(replacements) == 0) {
+    replacements <- rep(replacements, length(patterns) %/% length(replacements))
+  }
+  
   stopifnot(length(patterns) == length(replacements))
   x.new   <- x
   # initialize a matrix to store the position in x of each pattern match
