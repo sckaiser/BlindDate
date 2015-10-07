@@ -34,7 +34,11 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   # Guess the format.
   dt.format  <- GuessFormat(x.sample, mnth.pos, sample.sz)  # Guess format
   # print(date.format)  # debug
-  x.date     <- parse_date_time(x, orders = dt.format)  # lubridate convert
+  if (dt.format == "YmdHMS") {
+    x.date     <- fastPOSIXct(x)
+  } else {
+    x.date     <- parse_date_time(x, orders = dt.format)  # lubridate convert
+  }
   if (any(PM.times)) {  # if we had any PM times, fix them.
     x.hour   <- hour(x.date)  # get hours
     
