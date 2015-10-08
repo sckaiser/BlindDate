@@ -1,0 +1,17 @@
+is.useful <- function(FUN, x, thr = 1, sample.sz = min(5000, length(x)), ...) {
+  # Runs a function against a sample of a vector to estimate if the function
+  # will change the vector.
+  # Args:
+  #  FUN, a function which takes x as its first argument. FUN comes first to
+  #       facilitate calling via lapply.
+  #  x, a vector that is accepted by the function.
+  #  thr, a threshold value between 0 and 1; 1 being the strictest.
+  #  sample.sz, the number of values of x to sample.
+  #  ..., additional arguments to FUN.
+  # Returns:
+  #  a logical indicating whether or not FUN changes x.
+  
+  x     <- x[sample(sample.sz)]
+  match <- length(which(x == FUN(x, ...))) / sample.sz
+  if (match <= thr) T else F
+}
