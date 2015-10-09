@@ -8,19 +8,17 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   # Returns:
   #  x.date, a POSIX time vector
   
-  x          <- CleanText(x)  # handle extra spaces and NA-synonyms
+  sample.sz  <- 4000
+  sample.sz  <- min(sample.sz, length(x))
+  if (is.useful(CleanText, x, 1, sample.sz)) {
+    x        <- CleanText(x)  # handle extra spaces and NA-synonyms
+  }
   if (trim.dec) {
     x        <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
   }
-  sample.sz  <- 4000
-  sample.sz  <- min(sample.sz, length(x))
-  x.sample   <- x[sample(length(x), sample.sz)]  # sample for speed
-  
-  # Handle Month Text. First, find what proportion of x has text months:
-  text.month <- ConvertTextMonth(x.sample, F)
   mnth.pos   <- NA  # initialize
-  if (text.month > .95) {  # if more than 95% have text months...
-    out      <- ConvertTextMonth(x)  # ...then convert to numeric months
+  if (is.useful(ConvertTextMonth, x, 1, sample.sz, pos = F)) {
+    out      <- ConvertTextMonth(x)  # convert text to numeric months
     x        <- out[[1]]  # extract the converted data
     mnth.pos <- out[[2]]  # and which element had text months, if any. 
   }

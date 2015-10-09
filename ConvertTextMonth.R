@@ -1,12 +1,12 @@
-ConvertTextMonth <- function(x, convert = T, na.rm = F) {
+ConvertTextMonth <- function(x, convert = T, na.rm = F, pos = T) {
   # Checks or converts a text month to a number within a date-time string.
   # Args:
   #  x, a known or possible date-time character vector.
-  #  convert, a logical indicating whether to convert to the month number.
   #  na.rm, a logical indicating whether to ignore NA values.
+  #  pos, a logical indicating whether to send back the text month position.
   # Returns:
-  #  if convert = T, a character vector with text months replaced by numbers.
-  #  if convert = F, a length-one double: the proportion of x with text months.
+  #  if pos = F, a character vector with text months replaced by numbers.
+  #  if pos = T, the vector as above, plus the month's position.
   
   if (na.rm) {
    x <- x[!is.na(x)]
@@ -36,13 +36,13 @@ ConvertTextMonth <- function(x, convert = T, na.rm = F) {
   }
   matches    <- matches / denom   # calculate the proportion of matches
   best.col   <- which.max(matches)  # pick the highest; if tied, pick the first
-  if (convert) {
-    patterns <- date.df[ , best.col]
-    out    <- MultiGsub(patterns, 1:12, x, ignore.case = T)  # convert data
+  patterns   <- date.df[ , best.col]
+  out        <- MultiGsub(patterns, 1:12, x, ignore.case = T)  # convert data
+  if(pos) {
     mnth.pos <- TrueMode(out[[2]])  # most likely position of converted month
     mnth.pos[mnth.pos != 1] <- NA  # only declare if near-certain
     list(out[[1]], mnth.pos)  # return the converted data & month position
   } else {
-    as.vector(matches[best.col])  # return the proportion matched
+    out[[1]]
   }
 }
