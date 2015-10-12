@@ -14,7 +14,7 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     x          <- x[sample(length(x), sample.size)]  # sample for speed
   }
   n.elements   <- CountElements(x)
-  date.len     <- 3  # assume up to the first 3 elements are dates
+  date.len     <- 3L  # assume up to the first 3 elements are dates
   n.date.pos   <- min(n.elements, date.len)
   has.times    <- ifelse(n.elements > date.len, T, F)  # more elements = times
   x            <- TokenizeDt(x)  # create a list of date element vectors
@@ -23,8 +23,8 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   dates        <- lapply(dates, as.integer)  # TokenizeDt() ensures integers
   dates        <- lapply(dates, UniqueOrder)
   date.pos1    <- dates[[1]]
-  date.pos2    <- ListExtract(dates, 2)
-  date.pos3    <- ListExtract(dates, 3)
+  date.pos2    <- ListExtract(dates, 2L)
+  date.pos3    <- ListExtract(dates, 3L)
   dt.format    <- rep(-1, n.date.pos) # initialize with a failure value
   full.span    <- c("y", "m", "d")[1:n.date.pos]  # the complete span
   max.dt.p1    <- max(date.pos1)
@@ -34,10 +34,10 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   if (year.pos >= 1 & year.pos <= n.date.pos) {
     dt.format[year.pos] <- full.span[1] <- "Y"  # assign; & adjust span
   }
-  if (n.date.pos == 1) {
+  if (n.date.pos == 1L) {
     # Assume a year.
     dt.format  <- YearLength(dates)
-  } else if (n.date.pos == 2) {
+  } else if (n.date.pos == 2L) {
     # Assume a month and a year.
     # Check if either has values under 12:
     if (max.dt.p1 <= 12 & max.dt.p2 > 12) {
@@ -45,7 +45,7 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
     } else if (max.dt.p1 > 12 & max.dt.p2 <= 12) {
       dt.format[2] <- "m"
     }
-  } else if (n.date.pos == 3) {
+  } else if (n.date.pos == 3L) {
     # We could be more conservative & assume that if we have fairly big data 
     # then we'll see all months & days; but for now, just look for ranges.
     # If exactly one position is between 1 and 12, assign that as the month.
@@ -102,8 +102,8 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   if (has.times) {
     n.time.pos    <- n.elements - date.len  # first 3 are dates
     # assume Hours:Minutes:Seconds
-    time.format   <- substring("HMS", 0, min(3, n.time.pos))
-    if (n.time.pos > 3) {
+    time.format   <- substring("HMS", 0, min(3L, n.time.pos))
+    if (n.time.pos > 3L) {
       msg         <- paste(n.time.pos, "time elements were found.
                            Elements beyond 3 may be discarded.")
       warning(msg)
