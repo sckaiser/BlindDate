@@ -24,12 +24,14 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   }
   
   # Handle AM and PM text.
-  PM.times   <- grepl("PM", x)  # store vector of which times are PM
-  x          <- gsub("PM", "", x)  # Remove PM
-  x          <- gsub("AM", "", x)  # Remove AM
-  x.sample   <- x[sample(length(x), sample.sz)]  # resample
+  if (is.useful(SplitAMPM, x, 1, sample.sz, PM.vector = F)) {
+    out      <- SplitAMPM(x)  # remove AM &PM
+    x        <- out[[1]]  # extract the converted data
+    PM.times <- out[[2]]  # and which elements had AM/PM. 
+  }
   
   # Guess the format.
+  x.sample   <- x[sample(length(x), sample.sz)]  # resample
   dt.format  <- GuessFormat(x.sample, mnth.pos, sample.sz)  # Guess format
   # print(date.format)  # debug
   if (dt.format == "YmdHMS" && "fasttime" %in% .packages()) {
@@ -37,7 +39,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   } else {
     x.date     <- parse_date_time(x, orders = dt.format)  # lubridate convert
   }
-  if (any(PM.times)) {  # if we had any PM times, fix them.
+  if (exists("PM.times")) {  # if we had any PM times, fix them.
     x.hour   <- hour(x.date)  # get hours
     
     # Add 12 hours to all PM times on or after 1PM:
