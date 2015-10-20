@@ -8,8 +8,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   # Returns:
   #  x.date, a POSIX time vector
   
-  sample.sz  <- 4000
-  sample.sz  <- min(sample.sz, length(x))
+  sample.sz  <- min(4000, length(x))
   if (is.useful(CleanText, x, 1, sample.sz)) {
     x        <- CleanText(x)  # handle extra spaces and NA-synonyms
   }
