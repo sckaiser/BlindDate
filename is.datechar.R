@@ -12,8 +12,8 @@ is.datechar <- function(x) {
     x           <- x[sample(length(x), sample.sz)]  # sample for speed
     
     text.month  <- ConvertTextMonth(x, F)
-    if (text.month > .5) {  # if more than 50% have text months...
-      T  # return True
+    if (is.useful(ConvertTextMonth, x, 1, sample.sz, pos = F)) {
+      T 
     } else {
       x         <- MultiGsub(c("AM", "PM"), c("", ""), x)  # Remove AM & PM
       dt.format <- GuessFormat(x)  # Guess format
