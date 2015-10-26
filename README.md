@@ -27,7 +27,7 @@ times are almost always in the order HMS; and so on.
 2. Extract the zip file into its own directory.
 3. Run the following code in R:
 
-<code>pkgs <- c("lubridate", "stringr")</code>
+<code>pkgs <- c("lubridate", "stringr", "fasttime")</code>
 
 <code>sapply(pkgs, library, character.only = T)</code>
 
@@ -48,9 +48,11 @@ Try the following examples:
 For developers, a [digraph of functional relationships](https://github.com/sckaiser/BlindDate/blob/master/Digraph_functions.png) is provided to help visualize the code; I update it on an ad hoc basis.
 
 ## Dependencies
+#### Required
 lubridate
 stringr
-fasttime (suggested)
+#### Suggested
+fasttime
 
 ## Style
 This project aims to follow Google's R Style Guide:
