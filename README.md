@@ -50,6 +50,7 @@ For developers, a [digraph of functional relationships](https://github.com/sckai
 ## Dependencies
 lubridate
 stringr
+fasttime (suggested)
 
 ## Style
 This project aims to follow Google's R Style Guide:
