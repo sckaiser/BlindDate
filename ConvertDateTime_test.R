@@ -36,6 +36,13 @@ for (i in 1:ncol(test.mat)) {
   convert.mat[ , i] <- ConvertDateTime(x)
 }
 
+# Test is.datechar() in a separate loop to let each pass/fail independently
+is.dt.vec   <- rep(NA, ncol(test.mat))
+for (i in 1:ncol(test.mat)) {
+  x <- test.mat[ , i]
+  is.dt.vec[i]      <- is.datechar(x)
+}
+  
 # This following section is loop-free,
 # but harder to debug when a single format conversion fails.
 # convert.mat <- apply(test.mat, 2, ConvertDateTime)
