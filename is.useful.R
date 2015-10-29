@@ -11,7 +11,7 @@ is.useful <- function(FUN, x, thr = 1, sample.sz = min(5000, length(x)), ...) {
   # Returns:
   #  a logical indicating whether or not FUN changes x.
   
-  x     <- x[sample(sample.sz)]
+  x     <- x[sample(length(x), sample.sz)]
   x     <- x[!is.na(x)]
   match <- length(which(x == FUN(x, ...))) / length(x)
   if (match < thr) T else F
