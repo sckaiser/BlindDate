@@ -9,6 +9,7 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   #      interpretable by {lubridate}'s parse_date_time().
   
   # ignore NAs & blanks which provide no clues and complicate downstream steps:
+  x            <- CleanText(x)  # don't assume blanks were already removed
   x            <- x[!is.na(x)]
   if (length(x) > sample.size) {
     x          <- x[sample(length(x), sample.size)]  # sample for speed
