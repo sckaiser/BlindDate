@@ -30,7 +30,7 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   }
   
   # Guess the format.
-  x.sample   <- x[sample(length(x), sample.sz)]  # resample
+  x.sample   <- UnSample(x, sample.sz)  # resample
   dt.format  <- GuessFormat(x.sample, mnth.pos, sample.sz)  # Guess format
   # print(date.format)  # debug
   if (dt.format == "YmdHMS" && "fasttime" %in% .packages()) {
