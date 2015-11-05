@@ -9,7 +9,7 @@ is.datechar <- function(x) {
     x           <- CleanText(x)  # handle extra spaces and NA-synonyms
     x           <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
     sample.sz   <- min(4000L, length(x))
-    x           <- x[sample(length(x), sample.sz)]  # sample for speed
+    x           <- UnSample(x, sample.sz)  # sample for speed
     
     text.month  <- ConvertTextMonth(x, F)
     if (is.useful(ConvertTextMonth, x, 1, sample.sz, pos = F)) {
