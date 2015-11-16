@@ -15,9 +15,9 @@ UnSample <- function(x, sample.sz,
   stopifnot(length(x) >= sample.sz, sample.sz > end.sz)
   if (sample.sz >= 15 && end.sz > 0) {
     end.sz  <- end.sz / 2
-    rand.sz <- sample.sz - end.sz
     ends    <- c(x[1:end.sz], x[(length(x) - end.sz):length(x)])
     middle  <- x[end.sz:(length(x) - end.sz)]
+    rand.sz <- min(rand.sz, length(middle))
     c(ends, middle[sample(length(middle), rand.sz)])
   } else {
     warning("The vector was simply sampled at random.")
