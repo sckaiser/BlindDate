@@ -18,7 +18,7 @@ MultiGsub <- function(patterns, replacements, x, ...) {
   x.new   <- x
   # initialize a matrix to store the position in x of each pattern match
   loc.mat <- matrix(NA, nrow = length(x), ncol = length(patterns))
-  for (i in 1:length(patterns)) {
+  for (i in seq_along(patterns)) {
     temp  <- str_locate(x, patterns[i])  # find start & end of the pattern
     loc.mat[ , i] <- temp[ , 1]  # save the start
     x.new <- gsub(patterns[i], replacements[i], x.new, ...)
