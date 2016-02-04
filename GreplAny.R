@@ -5,11 +5,10 @@ GreplAny <- function(pattern, x, ...) {
   #   x, a character vector to be searched.
   # Returns:
   #  a logical indicating whether x contains any of the entries in pattern.
-  y   <- vapply(pattern, grepl, logical(length(x)), x, ...)  # check for matches
+  y  <- vapply(pattern, grepl, logical(length(x)), x, ...)  # check for matches
   if(is.matrix(y)) {
-    y <- apply(y, 1, any)  # consolidate results if length(x) > 1
+    apply(y, 1, any)  # return results if length(x) > 1
   } else {
-    y <- any(y)  # consolidate results if length(x) == 1
+    any(y)  # return results if length(x) == 1
   }
-  return(y)
 }
