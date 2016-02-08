@@ -23,5 +23,5 @@ SplitVectors <- function(x, n) {
   } else {
     vect.list   <- list(x)  # handle 'don't split' case
   }
-  return(vect.list)
+  vect.list
 }
