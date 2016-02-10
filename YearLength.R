@@ -3,12 +3,11 @@ YearLength <- function(date.pos) {
   # otherwise, returns Y (implying 3 or more digit years).
   
   year.digits <- nchar(date.pos) # count number of digits
-  year.digits <- TrueMode(year.digits) # pick most common.
+  year.digits <- TrueMode(year.digits) # pick most common
   stopifnot (year.digits >= 2)
   if (year.digits == 2) {
-    date.format <- "y" 
+    "y" 
   } else {
-    date.format <- "Y"
+    "Y"
   }
-  return(date.format)
 }
