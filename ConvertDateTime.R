@@ -55,5 +55,5 @@ ConvertDateTime <- function(x, t.format = "POSIXct", tz = "UTC", trim.dec = F) {
   if (t.format == "POSIXlt") {
     x.date   <- as.POSIXlt(x.date)  # convert if requested
   }
-  return(x.date)
+  x.date
 }
