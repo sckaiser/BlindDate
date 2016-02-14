@@ -10,7 +10,6 @@ SplitVectors <- function(x, n) {
   
   stopifnot(is.atomic(x), length(x) %% n == 0)
   # the 2nd term checks that input length is a multiple of the number of splits
-  IdxHelper <- function(idx, x) x[idx]  # subsets a vector x using idx
 
   if (n > 1) {
     seq1        <- seq(1, length(x) + 1 - n, by = n)  # first splitting sequence 
@@ -18,7 +17,7 @@ SplitVectors <- function(x, n) {
     for (i in 2:n) {
       seqx      <- seq.list[[i - 1]] + 1  # create next sequence
       seq.list  <- c(seq.list, list(seqx))  # append it
-      vect.list <- lapply(seq.list, IdxHelper, x)
+      vect.list <- lapply(seq.list, function(i, x) x[i], x)
     }
   } else {
     vect.list   <- list(x)  # handle 'don't split' case
