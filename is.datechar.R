@@ -16,7 +16,10 @@ is.datechar <- function(x) {
       T 
     } else {
       x         <- MultiGsub(c("AM", "PM"), c("", ""), x)  # Remove AM & PM
-      dt.format <- GuessFormat(x)  # Guess format
+      dt.format <- try(GuessFormat(x), silent = T)  # Guess format
+      if (class(dt.format)[1] == "try-error") {
+        return(F)  # GuessFormat didn't work
+      }
       !grepl("-1", dt.format)  # if dt.format has -1, we couldn't fully parse
     }
   } else {
