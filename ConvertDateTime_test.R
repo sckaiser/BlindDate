@@ -1,5 +1,5 @@
 # Test harness for ConvertDateTime.R script.
-pkgs <- c("lubridate", "stringr")
+pkgs <- c("lubridate", "stringr", "fasttime")
 sapply(pkgs, library, character.only = T)
 setwd("C:/Users/scott_kaiser/Desktop/Analytics and Data Science/BlindDate")
 source("SourceDir.R")
