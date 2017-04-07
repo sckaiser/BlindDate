@@ -27,7 +27,7 @@ times are almost always in the order HMS; and so on.
 2. Extract the zip file into its own directory.
 3. Run the following code in R:
 
-<code>pkgs <- c("lubridate", "stringr", "fasttime")</code>
+<code>pkgs <- c("lubridate", "stringr", "fasttime", "parallel")</code>
 
 <code>sapply(pkgs, library, character.only = T)</code>
 
@@ -51,6 +51,7 @@ For developers, a [digraph of functional relationships](https://github.com/sckai
 #### Required
 lubridate
 stringr
+parallel
 #### Suggested
 fasttime
 
