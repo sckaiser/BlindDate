@@ -29,7 +29,7 @@ times are almost always in the order HMS; and so on.
 
 <code>pkgs <- c("lubridate", "stringr", "fasttime", "parallel")</code>
 
-<code>sapply(pkgs, library, character.only = T)</code>
+<code>vapply(pkgs, library, FUN.VALUE = character(10), character.only = T)</code>
 
 <code>setwd("ReplaceWithYourDownloadDirectory/BlindDate")</code>
 
