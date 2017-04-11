@@ -29,12 +29,14 @@ convert.mat <- matrix(NA, nrow = nrow(test.mat), ncol = ncol(test.mat))
 convert.mat <- data.frame(convert.mat)
 convert.mat <- setNames(convert.mat, colnames(test.mat))
 
+start.tm    <- Sys.time()
 for (i in 1:ncol(test.mat)) {
   x <- test.mat[ , i]
   # print(GuessFormat(x))  # debug
   print(x[1])
   convert.mat[ , i] <- ConvertDateTime(x)
 }
+print(Sys.time() - start.tm)
 
 # Test is.datechar() in a separate loop to let each pass/fail independently
 is.dt.vec   <- rep(NA, ncol(test.mat))
