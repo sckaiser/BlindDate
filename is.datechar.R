@@ -4,7 +4,8 @@ is.datechar <- function(x) {
   #  x, a vector
   # Returns:
   #  a length-one logical indicating whether the vector is "date-as-character".
-
+  
+  cores         <- detectCores() - 1L
   if (is.character(x)) {
     x           <- CleanText(x)  # handle extra spaces and NA-synonyms
     x           <- sub("\\.[0-9]+$", "", x)  # remove trailing decimals
