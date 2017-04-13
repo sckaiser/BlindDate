@@ -21,8 +21,8 @@ GuessFormat <- function(x, mnth.pos = NA, sample.size = length(x)) {
   x            <- TokenizeDt(x)  # create a list of date element vectors
   x            <- unlist(x)
   dates        <- SplitVectors(x, n.elements)
-  dates        <- lapply(dates, as.integer)  # TokenizeDt() ensures integers
-  dates        <- lapply(dates, UniqueOrder)
+  dates        <- mclapply(dates, as.integer)  # TokenizeDt() ensures integers
+  dates        <- mclapply(dates, UniqueOrder)
   date.pos1    <- dates[[1]]
   date.pos2    <- ListExtract(dates, 2L)
   date.pos3    <- ListExtract(dates, 3L)

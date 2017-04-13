@@ -8,7 +8,7 @@ CountElements <- function(x) {
   #  y, an integer: the most frequent number of elements found.
   
   x <- TokenizeDt(x)  # tokenize to a list of character vectors (elements)
-  y <- lapply(x, length)  # count elements in each x
+  y <- mclapply(x, length)  # count elements in each x
   y <- unlist(y)
   TrueMode(y)  # return the most common.
 }

@@ -9,7 +9,7 @@ FindYear <- function(x) {
   
   ModeNchar <- function(x) TrueMode(nchar(x))  # mode of number of characters
   
-  x    <- lapply(x, ModeNchar)
+  x    <- mclapply(x, ModeNchar)
   year <- which (x >= 3)   # Confirm exactly one date element longer than 2
   if (length(year) == 1) {
     year  # return it

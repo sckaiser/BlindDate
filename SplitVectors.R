@@ -17,7 +17,7 @@ SplitVectors <- function(x, n) {
     for (i in 2:n) {
       seqx      <- seq.list[[i - 1]] + 1  # create next sequence
       seq.list  <- c(seq.list, list(seqx))  # append it
-      vect.list <- lapply(seq.list, function(i, x) x[i], x)
+      vect.list <- mclapply(seq.list, function(i, x) x[i], x)
     }
   } else {
     vect.list   <- list(x)  # handle 'don't split' case
