@@ -1,5 +1,4 @@
-UnSample <- function(x, sample.sz,
-                     end.sz = max(10, 0.005 * length(sample.sz))) {
+UnSample <- function(x, sample.sz, end.sz = max(10, 0.005 * sample.sz)) {
   # Randomly samples most of a vector, but includes beginning and ending values.
   # This is useful when loading data where unusual values are found at the ends.
   # For example, for data logged sequentially, early and later values may differ
