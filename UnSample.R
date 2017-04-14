@@ -6,12 +6,15 @@ UnSample <- function(x, sample.sz, end.sz = max(10, 0.005 * sample.sz)) {
   # life of the logging process.
   # Args:
   #  x, a vector.
-  #  sample.sz, the number of samples to return, including those at the ends.
-  #  end.sz, the number of samples from the beginning and end (combined).
+  #  sample.sz, a length-one integer; the number of samples to return, including
+  #             those at the ends.
+  #  end.sz, a length-one integer; the number of samples from the beginning and
+  #          from the end (combined).
   
   end.sz    <- round(end.sz)
   end.sz    <- end.sz + end.sz %% 2
-  stopifnot(length(x) >= sample.sz, sample.sz > end.sz)
+  stopifnot(length(sample.sz) == 1, length(end.sz) == 1, length(x) >= sample.sz,
+            sample.sz > end.sz)
   if (sample.sz >= 15 && end.sz > 0) {
     end.sz  <- end.sz / 2
     ends    <- c(x[1:end.sz], x[(length(x) - end.sz):length(x)])
