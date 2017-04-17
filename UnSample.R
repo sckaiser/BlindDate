@@ -11,8 +11,8 @@ UnSample <- function(x, sample.sz, end.sz = max(10, 0.005 * sample.sz)) {
   #  end.sz, a length-one integer; the number of samples from the beginning and
   #          from the end (combined).
   
-  end.sz    <- round(end.sz)
-  end.sz    <- end.sz + end.sz %% 2
+  end.sz    <- as.integer(round(end.sz))
+  end.sz    <- end.sz + end.sz %% 2L
   stopifnot(length(sample.sz) == 1, length(end.sz) == 1, length(x) >= sample.sz,
             sample.sz > end.sz)
   if (sample.sz >= 15 && end.sz > 0) {
