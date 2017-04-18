@@ -30,12 +30,3 @@ UnSample <- function(x, sample.sz, end.sz = -1L) {
     rand.sz <- min(sample.sz - end.sz, length(middle))
     c(ends, middle[sample(length(middle), rand.sz)])
 }
-
-
-UnSample(1, 1)
-UnSample(1:100, 1)
-UnSample(1:100, 4)
-UnSample(1:100, 5)
-UnSample(1:100, 9)
-UnSample(1:100, 10)
-UnSample(1:1000, 100)
