@@ -16,7 +16,7 @@ is.datechar <- function(x) {
     if (is.useful(ConvertTextMonth, x, 1, sample.sz, pos = F)) {
       T 
     } else {
-      x         <- MultiGsub(c("AM", "PM"), c("", ""), x)  # Remove AM & PM
+      x         <- MultiGsub(c("AM", "PM"), c("", ""), x)[[1]]  # Remove AM & PM
       dt.format <- try(GuessFormat(x), silent = T)  # Guess format
       if (class(dt.format)[1] == "try-error") {
         return(F)  # GuessFormat didn't work
