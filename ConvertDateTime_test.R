@@ -1,7 +1,7 @@
 # Test harness for ConvertDateTime.R script.
 pkgs <- c("lubridate", "stringr", "fasttime", "parallel")
-vapply(pkgs, library, FUN.VALUE = character(10), character.only = T)
-setwd("C:/Users/scott_kaiser/Desktop/Analytics and Data Science/BlindDate")
+sapply(pkgs, library, character.only = T)
+setwd("/Users/scott_kaiser/Desktop/src/BlindDate")
 source("SourceDir.R")
 SourceDir(exclude = c("format utility.R", "ConvertDateTime_test.R"))
 
